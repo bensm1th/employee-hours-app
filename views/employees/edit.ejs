@@ -1,0 +1,15 @@
+<% include ../partials/header %>
+<div class="ui container">
+    <form class="ui form" action="/employee/<%=employee._id%>?_method=PUT" method="POST">
+            <input type="text" value="<%= employee.firstName %>" name="employee[firstName]" placeholder="First Name">
+            <input type="text" value="<%= employee.lastName %>" name="employee[lastName]" placeholder="Last Name">
+            <input type="text" value="<%= employee.employeeNumber %>" name="employee[employeeNumber]" placeholder="Employee Number">
+            <input type="text" value="<%= employee.address %>" name="employee[address]" placeholder="Address">
+            <input type="text" value="<%= employee.phone %>" name="employee[phone]" placeholder="phone">
+            <input type="text" value="<%= employee.DOB %>" name="employee[DOB]" placeholder="Date of Birth">
+            <input type="text" value="<%= employee.sickDaysLeft %>" name="employee[sickDaysLeft]" placeholder="Sick Days Left">
+            <input type="text" value="<%= employee.vacationDaysLeft %>" name="employee[vacationDaysLeft]" placeholder="Vacation Days Left">
+            <button>Submit</button>
+    </form>
+</div>
+<% include ../partials/footer %>

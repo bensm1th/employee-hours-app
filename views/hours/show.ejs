@@ -1,0 +1,12 @@
+<% include ../partials/header %>
+    <h1>you've hit the SHOW hours route</h1>
+    <% data.forEach(person=>{  %>
+        <li> 
+            <%= person.employee.firstName + " "  %> </br>
+            <%= person.hours %>
+        </li>
+    <% }); %>
+  
+    
+<% include ../partials/footer %>
+

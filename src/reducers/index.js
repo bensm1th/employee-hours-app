@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import HoursReducer from './reducer_hours';
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state
+  hours: HoursReducer,
 });
 
 export default rootReducer;

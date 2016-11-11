@@ -1,0 +1,18 @@
+<% include ../partials/header %>
+    <h1>you've hit the SHOW employees route</h1>
+    
+    <li> First Name: <%= employee.firstName %> </li>
+    <li> Last Name:  <%= employee.lastName %> </li>
+    <li> Employee Number: <%= employee.employeeNumber %> </li>
+    <li> Address: <%= employee.address %> </li>
+    <li> Phone: <%= employee.phone %> </li>
+    <li> DOB: <%= employee.DOB %> </li>
+    <li> Sick Days Left: <%= employee.sickDaysLeft %> </li>
+    <li> Vacation Days Left:    <%= employee.vacationDaysLeft %> </li>
+    <a href="/employee/<%= employee._id %>/edit"><button>edit</button></a>
+    <a href="/employee"><button>back</button></a>
+    <a href="/employee/<%= employee._id %>/hours/new"><button>calculate hours</button></a>
+    
+    
+
+<% include ../partials/footer %>

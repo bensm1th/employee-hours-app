@@ -1,0 +1,44 @@
+<% include ../partials/header %>
+    <div class="ui container">
+        <h1 id="periodHeader">Set Pay Period</h1>
+    </div>
+    
+    <div class="ui container" id="formWrapper">
+        <form id="setPeriod" class="ui" action="/hours" method="POST">
+            <div class="ui grid">
+                <div class="four wide column"></div>
+                <div class="four wide column">
+                    <h1>FROM</h1>
+                </div>
+                <div class="four wide column">
+                    <h1>TO</h1>
+                </div>
+                <div class="four wide column"></div>
+            </div>
+            <div class="ui grid">
+                <div class="four wide column"></div>
+                <div class="four wide column">
+                    <input type="text" id="date" data-format="MM-DD-YYYY" data-template="MMM D YYYY" name="beginning" value="10-03-2016">
+                </div>
+                <div class="four wide column">
+                    <input type="text" id="date2" data-format="MM-DD-YYYY" data-template="MMM D YYYY" name="end" value="10-17-2016">
+                </div>
+                <div class="four wide column"></div>
+            </div>
+            <div class="ui grid">
+                <div class="four wide column"></div>
+                <div class="four wide column">
+                    <button>Submit</button>
+                </div>
+                <div class="four wide column"></div>
+                <div class="four wide column"></div>
+            </div>
+            
+        </form>
+    </div>
+    <div id="hoursTable">
+        
+    </div>
+   
+    
+<% include ../partials/footer %>
