@@ -1,14 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getHours } from '../actions';
-import HoursTable from './table';
+import { postHours } from '../actions';
+import { Link } from 'react-router';
 
 class DisplayDates extends Component {
+
+    static contextTypes = {
+        router: PropTypes.object
+    }
+
+    onFormSubmit(beginning, end) {
+        this.props.postHours(beginning, end)
+            .then(()=> {
+                this.context.router.push('/hourstable/' + this.props.state.hours.data._id);
+            });
+
+    }     
     render() {
         let beginning;
         let end;
-        const receivedTableData = this.props.state.hours.status === 200;
-        const hours = receivedTableData ? this.props.state.hours : null;
+        const resStatus = this.props.state.hours.status === 200 ? true : false ;
+        if (resStatus) {
+            //const tableId = this.props.state.hours.data._id
+        } 
     return (
         <div>
             <div>
@@ -19,7 +33,7 @@ class DisplayDates extends Component {
                 <div className="ui container" id="formWrapper">
                     <form id="setPeriod" className="ui" onSubmit={e=> {
                         e.preventDefault();
-                        this.props.getHoursData(beginning.value, end.value);
+                        this.onFormSubmit(beginning.value, end.value);
                     }}>
                         <div className="ui grid">
                             <div className="four wide column"></div>
@@ -34,7 +48,7 @@ class DisplayDates extends Component {
                         <div className="ui grid">
                             <div className="four wide column"></div>
                             <div className="four wide column">
-                                <input type="text" ref={domNode => {
+                                <input value="10/3/2016" type="text" ref={domNode => {
                                     beginning = domNode;
                                 }}/>
                             </div>
@@ -48,7 +62,7 @@ class DisplayDates extends Component {
                         <div className="ui grid">
                             <div className="four wide column"></div>
                             <div className="four wide column">
-                                <button>Submit</button>
+                                    <button>Submit</button>
                             </div>
                             <div className="four wide column"></div>
                             <div className="four wide column"></div>
@@ -56,7 +70,6 @@ class DisplayDates extends Component {
                     </form>
                 </div>
             </div>
-        <HoursTable hours={hours} status={receivedTableData}/>
         </div>
         )
     }
@@ -68,12 +81,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getHoursData: (date1, date2) => {
-            dispatch(getHours(date1, date2))
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayDates);
+export default connect(mapStateToProps, { postHours })(DisplayDates);
