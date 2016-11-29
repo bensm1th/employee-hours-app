@@ -8,7 +8,7 @@ var express     = require('express'),
 //INDEX
 router.get('/employee', function(req, res) {
     Employee.find({}, function(err, employees) {
-        res.render('employees/index', {employees: employees});
+        res.send({employees: employees});
     });
 });
 
@@ -19,7 +19,8 @@ router.get('/employee/new', function(req, res) {
 
 //CREATE
 router.post('/employee/new', function(req, res) {
-
+    const hourlyPay = req.body.hourlyPay ? { applies: true, rate: req.body.hourlyPay } : { applies: false };
+    const salary = req.body.salary ? { applies: true, rate: req.body.salary } : { applies: false };
     var newEmployee = ({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -29,8 +30,8 @@ router.post('/employee/new', function(req, res) {
         DOB: req.body.DOB,
         sickDaysLeft: req.body.sickDaysLeft,
         vacationDaysLeft: req.body.vacationDaysLeft,
-        hourlyPay: { applies: false, rate: 0},
-        salary: { applies: true, rate: 1234},
+        hourlyPay: hourlyPay,
+        salary: salary,
         timeStamps: [],
         currentlyWorking: false
     });
@@ -38,19 +39,18 @@ router.post('/employee/new', function(req, res) {
         if (err) {
             console.log(err);
         } else {
-            console.log(employee);
             res.send('YOU\'VE HIT THE CREATE USER ROUTE');
         }
     });
 });
 
 //SHOW
-router.get('/employee/:id', function(req, res) {
-    Employee.findById(req.params.id).exec(function(err, employee) {
+router.get('/employee/:employee_id', function(req, res) {
+    Employee.findById(req.params.employee_id).exec(function(err, employee) {
         if (err) {
             console.log(err);
         } else {
-            res.render('employees/show', {employee: employee});
+            res.send({employee: employee})
         }
     });
 });
@@ -64,14 +64,25 @@ router.get('/employee/:id/edit', function(req, res) {
 
 //UPDATE
 router.put('/employee/:id', function(req, res) {
-    Employee.findByIdAndUpdate(req.params.id, req.body.employee, function(err, employee) {
+    Employee.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, employee) {
         if (err) {
-            res.redirect("/employee");
+            res.send('there was an error');
         } else {
-            res.redirect("/employee/" + req.params.id);
+            res.send(employee);
         }
     });
     
+});
+
+//DESTROY route
+router.delete('/employee/:employee_id', function(req, res) {
+    Employee.findByIdAndRemove(req.params.employee_id, function(err, employee) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send('employee deleted');
+        }
+    });
 });
 
 module.exports = router;

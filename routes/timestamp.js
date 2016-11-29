@@ -15,17 +15,28 @@ router.get('/timestamp/new', function(req, res) {
 //CREATE route
 router.post('/timestamp', function(req, res) {
     Employee.find({'employeeNumber': req.body.employeeNumber}, function(err, foundEmployee) {
+        
         if (err) console.log(err);
+        var logState = {};
+        //if no employee is found, send back an error message
+        if (!foundEmployee.length) {
+            console.log('successfully reached return statement');
+            logState.success = {state: false};
+            logState.error = {state: true, message: 'No employee with that number was found in our database'};
+            return res.send({employee: foundEmployee[0], logState: logState});
+        }
+        
         else {            
             Timestamp.create({ time: req.body.time, employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
-            //Timestamp.create({ time: Date.now(), employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
                 if (err) console.log(err);
                 else {
-                    var logState = "";
+                    
                     if (!foundEmployee[0].currentlyWorking) {
                         //check to see if the person clicked 'log in'
                         if (req.body.clock == 'in') {
                             //go ahead an log them in
+                            logState.success = {state: true, message: 'You successfully clocked IN'};
+                            logState.error = {state: false};
                             newlyCreatedTimestamp.logIn = true;
                             foundEmployee[0].currentlyWorking = true;
                         } else {
@@ -34,13 +45,16 @@ router.post('/timestamp', function(req, res) {
                             foundEmployee[0].currentlyWorking = false;
                             //do some error handling here, either directly, or fired off of when a timestamp is inappropriate
                             newlyCreatedTimestamp.inappropriate = true;
-                            logState += "you were already clocked out.";
+                            logState.error = { state: true, message: "You were already clocked OUT."};
+                            logState.success = {state: false};
                         }
                     }
                     else {
                         //check to see if the employee clicked 'log out'
                         if (req.body.clock == 'out') {
                             //go ahead and log them out.  
+                            logState.success = {state: true, message: 'You successfully clocked OUT'};
+                            logState.error = {state: false};
                             newlyCreatedTimestamp.logIn = false;
                             foundEmployee[0].currentlyWorking = false;
                         } else {
@@ -48,13 +62,15 @@ router.post('/timestamp', function(req, res) {
                             newlyCreatedTimestamp.logIn = true;
                             foundEmployee[0].currentlyWorking = true;
                             newlyCreatedTimestamp.inappropriate = true;
-                            logState += "you were already clocked in";
+                            logState.error = {state: true, message: "You were already clocked IN"};
+                            logState.success = {state: false};
                         }
                     }
                     newlyCreatedTimestamp.save();
                     foundEmployee[0].save();
-                    console.log(newlyCreatedTimestamp);
-                    res.render('timestamps/new', {employee: foundEmployee[0], timestamp: newlyCreatedTimestamp, logState: logState});
+                    logState.show = true;
+                    console.log(logState);
+                    res.send({employee: foundEmployee[0], timestamp: newlyCreatedTimestamp, logState: logState});
                 }
             });
         }

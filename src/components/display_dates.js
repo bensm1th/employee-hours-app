@@ -20,9 +20,6 @@ class DisplayDates extends Component {
         let beginning;
         let end;
         const resStatus = this.props.state.hours.status === 200 ? true : false ;
-        if (resStatus) {
-            //const tableId = this.props.state.hours.data._id
-        } 
     return (
         <div>
             <div>
@@ -62,11 +59,18 @@ class DisplayDates extends Component {
                         <div className="ui grid">
                             <div className="four wide column"></div>
                             <div className="four wide column">
-                                    <button>Submit</button>
+                                    <button className="ui green button">Submit</button>
+                            </div>
+                            <div className="four wide column">
+                                <Link to='/hours/index'>
+                                    <button className='ui blue button'>
+                                        Back
+                                    </button> 
+                                </Link>
                             </div>
                             <div className="four wide column"></div>
-                            <div className="four wide column"></div>
                         </div>
+                        
                     </form>
                 </div>
             </div>

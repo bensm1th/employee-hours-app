@@ -1,8 +1,9 @@
 import React from 'react';
+import { v4 } from 'node-uuid';
 
 const TableRow = (props) => {
     return (
-        <tr>{props.children}</tr>
+        <tr key={v4()}>{props.children}</tr>
     )
 }
 

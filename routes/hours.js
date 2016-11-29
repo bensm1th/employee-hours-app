@@ -7,29 +7,21 @@ var express     = require('express'),
     Employee    = require('../models/employees'),
     Table       = require('../models/tables');
 
-//RESTful routes
+/*----  RESTful routes  ----*/
 
 //INDEX route
-router.get('/hours/:id', function(req, res) {
-    
-    Table.findById(req.params.id, function(err, table) {
-        console.log(table);
-        res.send(table);
+
+router.get('/hours/', function(req, res) {
+    Table.find({}, function(err, tables) {
+        res.send({tables});
     })
 });
-
 
 //NEW route
 router.get('/hours/new', function(req, res) {
     res.render('hours/new');
 });
 
-//SHOW route
-/*
-router.get('/hours/show', function(req, res) {
-    res.send('you hit the hour SHOW route');
-});
-*/
 //CREATE route
 router.post('/hours', function(req, res) {
      Employee.find({}, function(err, employees) {
@@ -67,6 +59,14 @@ router.post('/hours', function(req, res) {
     });
 });
 
+//SHOW route
+router.get('/hours/:id', function(req, res) {
+    
+    Table.findById(req.params.id, function(err, table) {
+        console.log(table);
+        res.send(table);
+    })
+});
 
 //EDIT route
 router.get('hours/:hours_id/edit', function(req, res) {
@@ -79,8 +79,6 @@ router.put('/hours/:hours_id', function(req, res) {
         if (err) {
             console.log(err) 
         } else {
-            console.log('==== saved table =====');
-            console.log(table);
             res.send('you hit the hours UPDATE route');
         }
     });

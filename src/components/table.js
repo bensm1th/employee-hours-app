@@ -5,10 +5,13 @@ import TableRow from './table_row';
 import TableCell from './table_cell';
 import { bindActionCreators } from 'redux';
 import { fetchTableData, cellClick, cellBlur, saveTable } from '../actions/index';
+import { v4 } from 'node-uuid';
+import { Link } from 'react-router';
+
 
 const renderHeaders = (datesArr) => {
     return datesArr.map(day=> {
-        return <TableHeader date={day} key={day} />
+        return <TableHeader date={day} key={v4()} />
     })
 }
 
@@ -32,7 +35,7 @@ class HoursTable extends Component {
         return data.map(employee=> {
             const cells = employee.hours.tableArr.map((cell, index) => {
                 //sickTime, vacationTime, absentTime, holiday
-                const key = index + cell.employeeId;
+                const key = v4();
                 let display;
                 if (index === 0) {
                     display = cell.name;
@@ -59,12 +62,11 @@ class HoursTable extends Component {
                             holiday={cell.holiday}
                         />
             });
-            return (<TableRow> {cells} </TableRow>);
+            return (<TableRow key={v4()}>{cells}</TableRow>);
         });
     }
 
     render() {
-    
     const { hours, hours: { status } } = this.props;
     const employeeData = status === 200 ? this.renderEmployees(hours.data.data) : <tr><td><div> employee name! </div></td></tr>;
     const headers = status === 200 ? renderHeaders(hours.data.dates): <th>Date</th>;
@@ -87,6 +89,9 @@ class HoursTable extends Component {
                     className="ui green button"
                     onClick={()=> this.props.saveTable(hours)}
                 >Save</button>
+                <Link to={`/hours` }>
+                    <button className='ui red button'>Cancel</button>
+                </Link>
             </div>
         )
     }
