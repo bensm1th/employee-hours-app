@@ -20,9 +20,9 @@ router.post('/timestamp', function(req, res) {
         var logState = {};
         //if no employee is found, send back an error message
         if (!foundEmployee.length) {
-            console.log('successfully reached return statement');
             logState.success = {state: false};
             logState.error = {state: true, message: 'No employee with that number was found in our database'};
+            logState.show = true;
             return res.send({employee: foundEmployee[0], logState: logState});
         }
         
@@ -69,7 +69,6 @@ router.post('/timestamp', function(req, res) {
                     newlyCreatedTimestamp.save();
                     foundEmployee[0].save();
                     logState.show = true;
-                    console.log(logState);
                     res.send({employee: foundEmployee[0], timestamp: newlyCreatedTimestamp, logState: logState});
                 }
             });
@@ -131,9 +130,6 @@ router.post('/timestamp3/:id', function(req, res) {
                     timestamps.forEach(stamp=> {
                         console.log(stamp.time);
                     });
-                    console.log(' ');
-                    console.log('===============================');
-                    console.log(' ');
                     var sorted = sortDates(timestamps);
                     sorted.forEach(stamp=> {
                         console.log(stamp.time);

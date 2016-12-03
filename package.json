@@ -28,6 +28,7 @@
   "dependencies": {
     "axios": "^0.15.2",
     "babel-preset-stage-1": "^6.1.18",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.1",
@@ -35,12 +36,15 @@
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "flash": "^1.1.0",
+    "jwt-simple": "^0.5.1",
     "lodash": "^3.10.1",
     "method-override": "^2.3.6",
     "moment": "^2.15.2",
     "mongoose": "^4.6.6",
+    "morgan": "^1.7.0",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
     "promise": "^7.1.1",
@@ -50,6 +54,9 @@
     "react-router": "^2.0.1",
     "redux": "^3.0.4",
     "redux-form": "^6.2.0",
-    "redux-promise": "^0.5.3"
+    "redux-logger": "^2.7.4",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.1.0",
+    "semantic-ui-react": "^0.61.7"
   }
 }

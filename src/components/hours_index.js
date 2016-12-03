@@ -7,29 +7,34 @@ import { Link } from 'react-router';
 class HoursIndex extends Component {
 
     componentDidMount() {
+        localStorage.clear();
         this.props.fetchTables();
     }
 
    renderTables() {
        return this.props.tables.map(table => {
-           console.log(table);
            const length = table.dates.length - 1;
            return (
-                <Link key={v4()} to={`hourstable/${table._id}`}>
-                    <li key={v4()}>{table.dates[0]} - {table.dates[length]} </li>
+                <Link key={v4()} to={`/hourstable/${table._id}`}>
+                    <li className='ui item' key={v4()}>{table.dates[0]} - {table.dates[length]} </li>
                 </Link>
             )
        })
    }
     render() {
+        const tables = this.props.tables ? this.renderTables() : '';
         return (
             <div className="ui container">
-                Current tables by start and ends dates:
-                <ul>
-                    {this.renderTables()}
-                </ul>
-                 <Link to='/hours'><button className="ui green button">create table</button></Link>
-                 <Link to='/'><button className="ui blue button">back</button></Link>
+                <div className='ui center aligned segment'>
+                    <h1> CURRENT TABLES </h1>
+                </div>
+                <div className='ui center aligned  segment'>
+                    <ul className='ui list'>
+                        {tables}
+                    </ul>
+                    <Link to='/hours'><button className="ui green button">create table</button></Link>
+                    <Link to='/'><button className="ui orange button">back</button></Link>
+                 </div>
             </div>
         )
     }

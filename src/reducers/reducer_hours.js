@@ -1,3 +1,5 @@
+import { UPDATE_HOURS, CELL_BLUR, CELL_CLICKED, SAVE_TABLE, POST_HOURS, GET_TABLE } from '../actions/types';
+
 const timeType = (payload) => {
     const totalTime = payload.update.hours + ":" + payload.update.mins;
     switch(payload.update.type) {
@@ -16,14 +18,14 @@ const timeType = (payload) => {
 
 const changeTable = (state={}, action) => {
     switch(action.type) {
-        case 'UPDATE_HOURS':
+        case UPDATE_HOURS:
             if (state.id === action.payload.id) {
                 const typeObj = timeType(action.payload);
                 return Object.assign({}, state, {editable: false}, typeObj)
             }
             return state;
-        case 'CELL_BLUR':
-        case 'CELL_CLICKED':
+        case CELL_BLUR:
+        case CELL_CLICKED:
             if (action.payload.id === state.id) {
             
                 return {...state, editable: !state.editable};
@@ -38,15 +40,15 @@ const change = (state={}, action) => {
 
 export default function(state={}, action) {
     switch(action.type) {
-        case 'SAVE_TABLE':
+        case SAVE_TABLE:
             return Object.assign({}, state, action.payload);
-        case 'POST_HOURS':
+        case POST_HOURS:
             return Object.assign({}, state, action.payload);
-        case 'GET_TABLE':
+        case GET_TABLE:
             return Object.assign({}, state, action.payload);
-        case 'UPDATE_HOURS':
-        case 'CELL_BLUR':
-        case 'CELL_CLICKED':
+        case UPDATE_HOURS:
+        case CELL_BLUR:
+        case CELL_CLICKED:
             return {...state, data: {...state.data, data: [...state.data.data.map(e=>change(e, action)) ]}};
     }
     return state;

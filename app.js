@@ -7,9 +7,6 @@ var express         = require('express'),
     flash           = require('connect-flash'),
     config          = require('./config/config'),
     port            = process.env.PORT || '3000',
-    passport        = require('passport'),
-    localStrategy   = require('passport-local'),
-
     //add models
     Employee        = require('./models/employees'),
 
@@ -17,6 +14,7 @@ var express         = require('express'),
     timestampRoute  = require('./routes/timestamp'),
     employeeRoute   = require('./routes/employee'),
     hoursRoute      = require('./routes/hours');
+    authRoute       = require('./routes/auth');
 
 mongoose.connect(config.dbLocation);
 
@@ -28,31 +26,12 @@ app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 app.use(flash());
 
-//PASSPORT CONFIG
-app.use(require('express-session')({
-    secret: config.passportSecret,
-    resave: false,
-    saveUninitialized: false
-}));
-/*
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new localStrategy(Employee.authenticate()));
-passport.serializeUser(Employee.serializeUser());
-passport.deserializeUser(Employee.deserializeUser());
-*/
-// use this for all middleware
-/*
-app.use(function(req, res, next) {
-    res.locals.error = req.flash('error');
-    res.locals.success = req.flash('success');
-});
-*/
+
 //enable routes
 app.use(employeeRoute);
 app.use(timestampRoute);
 app.use(hoursRoute);
-
+app.use(authRoute)
 
 app.listen(port, function() {
     console.log('tlc listening on port ' + port);

@@ -10,3 +10,30 @@ form {
 .timeSelect {
     font-size: 10px;
 }
+
+#employeeEdit {
+    margin-left: 45px;
+    color: red;
+    float: right;
+}
+
+#employeeEdit:hover {
+    color: darkred;
+    font-size: 15px;
+}
+
+#employeeInfo {
+    margin-left: 15px;
+    color: blue;
+    float: right;
+}
+
+#employeeInfo:hover {
+    margin-left: 15px;
+    color: darkblue;
+    font-size: 15px;
+}
+
+.error {
+    color: red;
+}

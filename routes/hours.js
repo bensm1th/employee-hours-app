@@ -63,7 +63,6 @@ router.post('/hours', function(req, res) {
 router.get('/hours/:id', function(req, res) {
     
     Table.findById(req.params.id, function(err, table) {
-        console.log(table);
         res.send(table);
     })
 });
@@ -86,7 +85,17 @@ router.put('/hours/:hours_id', function(req, res) {
 
 //DELETE route
 router.delete('/hours/:hours_id', function(req, res) {
-    res.send('you hit the hour DELETE route');
+    
+    Table.findByIdAndRemove(req.params.hours_id, function(err, table) {
+        console.log('----table----')
+        console.log(table);
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(table);
+            res.send('table deleted');
+        }
+    })
 });
 
 module.exports = router;

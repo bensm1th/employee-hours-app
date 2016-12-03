@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { postTimestamp, onIdChange, clearLogState } from '../actions/index';
-import ClockMessage from './clock_message';
+import AlertMessage from './alert_message';
+import { Link } from 'react-router';
+
 
 class TimestampNew extends Component {
 
@@ -12,7 +14,6 @@ class TimestampNew extends Component {
 
     componentWillMount() {
         localStorage.clear();
-        this.props.clearLogState();
     }
 
     handleClockSubmit(e, type) {
@@ -36,27 +37,35 @@ class TimestampNew extends Component {
     }
 
     render() {
-        const { handleSubmit } = this.props;
-    
+        const { handleSubmit, errorMessage, successMessage, success, show } = this.props;
+
         return (
             <div className="ui container">
-                <h1>Employees: Please clock in/out</h1>
-                <form className="ui form" id="clock">
-                    <div className="ui input">
-                        <input value={this.props.IdInput} onChange={e=>this.handleInputChange(e)} type="text" name='employeeNumber' placeholder="ID#"/>
-                    </div>
-                    <button className="ui blue button" value="in" onClick={e=>this.handleClockSubmit(e, 'in')}>Clock-In</button>
-                    <button className="ui green button" value="out" onClick={e=>this.handleClockSubmit(e, 'out')}>Clock-Out</button>
-                </form>
-                { this.props.timestamp.logState ? (
-                    <ClockMessage
-                        handleMessageClose={this.handleMessageClose}
-                        error={this.props.timestamp.logState.error}
-                        success={this.props.timestamp.logState.success}
-                     />
-                ): (
-                    <div> Please log in/out </div>
-                )}
+                <div className='ui center aligned segment'>
+                <h1>EMPLOYEE CLOCK-IN/OUT</h1>
+                </div>
+                <div className='ui center aligned segment'>
+                    <form className="ui form" id="clock">
+                        <div className="ui input">
+                            <input value={this.props.IdInput} onChange={e=>this.handleInputChange(e)} type="text" name='employeeNumber' placeholder="ID#"/>
+                        </div>
+                        <button className="ui blue button" value="in" onClick={e=>this.handleClockSubmit(e, 'in')}>Clock-In</button>
+                        <button className="ui green button" value="out" onClick={e=>this.handleClockSubmit(e, 'out')}>Clock-Out</button>
+                    </form>
+                    { show ? (
+                        <AlertMessage
+                            handleMessageClose={this.handleMessageClose}
+                            errorMessage={errorMessage}
+                            successMessage={successMessage}
+                            success={success}
+                        />
+                    ): (
+                        <div> Please clock in/out </div>
+                    )}
+                    <Link to='/'>
+                        <button className='ui orange button'>Back</button>
+                    </Link>
+                </div>
             </div>
         )
     }
@@ -65,7 +74,12 @@ class TimestampNew extends Component {
 const mapStateToProps = (state) => {
     return {
         IdInput: state.IdInput,
-        timestamp: state.timestamp
+        timestamp: state.timestamp,
+        errorMessage: state.timestamp.logState.error.message,
+        success: state.timestamp.logState.success.state,
+        successMessage: state.timestamp.logState.success.message, 
+        show: state.timestamp.logState.show
+        
     }
 }
 

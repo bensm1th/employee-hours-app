@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import Header from './header';
 
-
-export default class App extends Component {
-  render() {
+const App = ({children, location}) => {
     return (
       <div>
-        {this.props.children}
+        <Header path={location}/>
+        {children}
       </div>
     );
-  }
 }
+
+export default App;

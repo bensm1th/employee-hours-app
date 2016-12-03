@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployee, updateEmployee, deleteEmployee } from '../actions/index';
+import { fetchEmployee, updateEmployee, deleteEmployee, clearEmployee } from '../actions/index';
 import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 
@@ -13,12 +13,15 @@ class EmployeeEdit extends Component {
         router: PropTypes.object
     }
     
-    componentDidMount() {
-        this.props.fetchEmployee(this.props.params.employee_id).
-            then(this.handleInitialize());
+    componentWillMount() {
+        console.log('mounted');
+        localStorage.clear();
+        this.props.fetchEmployee(this.props.params.employee_id). 
+            then(result=>this.handleInitialize());
     }
     
     handleInitialize() {
+        console.log('handle initialize');
         const hourlyPay = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : 0 ;
         const salary = this.props.employee.salary.applies ? this.props.employee.salary.rate : 0 ;
         const initData = {
@@ -37,6 +40,10 @@ class EmployeeEdit extends Component {
         this.props.initialize(initData);
     }
 
+    componentWillUnmount() {
+        this.props.clearEmployee();
+    }
+
     handleFormSubmit(formProps) {
         this.props.updateEmployee(this.props.employee._id, formProps). 
             then(this.context.router.push('/employee/' + this.props.employee._id));
@@ -48,29 +55,38 @@ class EmployeeEdit extends Component {
     }
 
     render() {
+        console.log('render');
         const { handleSubmit } = this.props;
-
+        if (!this.props.employee) {
+            console.log('diverted');
+            return (<div>...loading</div>)
+        }
         return (
             <div className="ui container">
-                <form className="ui form" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                    <Field name='firstName' type='text' component={renderField} label="First Name"/>
-                    <Field name='lastName' type='text' component={renderField} label="Last Name"/>
-                    <Field name="employeeNumber" component={renderField} label="Employee Number" type="text"/>
-                    <Field name="address" component={renderField} label="Address" type="text"/>
-                    <Field name="phone" component={renderField} label="Phone" type="text"/>
-                    <Field name="DOB" component={renderField} label="Date of Birth" type="text"/>
-                    <Field name="sickDaysLeft" component={renderField}  label="Sick Days Left" type="text"/>
-                    <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
-                    <Field name="hourlyPay" component={renderField} label="Hourly Pay" />
-                    <Field name="salary" component={renderField} label="Salary" />
-                    <button action='submit' className='ui green button'>Save Changes</button>
-                    <Link to={`/employee/${this.props.employee._id}` }>
-                        <button className='ui orange button'>Cancel</button>
-                    </Link>
-                    <Link to={`/employee`}>
-                        <button onClick={()=>this.handleDelete()} className="ui red button">Delete Employee</button>
-                    </Link>
-                </form>
+                <div className='ui segment'>
+                    <h1>EDIT EMPLOYEE INFO </h1>
+                </div>
+                <div className='ui segment'>
+                    <form className="ui form" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                        <Field name='firstName' type='text' component={renderField} label="First Name"/>
+                        <Field name='lastName' type='text' component={renderField} label="Last Name"/>
+                        <Field name="employeeNumber" component={renderField} label="Employee Number" type="text"/>
+                        <Field name="address" component={renderField} label="Address" type="text"/>
+                        <Field name="phone" component={renderField} label="Phone" type="text"/>
+                        <Field name="DOB" component={renderField} label="Date of Birth" type="text"/>
+                        <Field name="sickDaysLeft" component={renderField}  label="Sick Days Left" type="text"/>
+                        <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
+                        <Field name="hourlyPay" component={renderField} label="Hourly Pay" />
+                        <Field name="salary" component={renderField} label="Salary" />
+                        <button action='submit' className='ui green button'>Save Changes</button>
+                        <Link to={`/employee/${this.props.employee._id}` }>
+                            <button className='ui orange button'>Cancel</button>
+                        </Link>
+                        <Link to={`/employee`}>
+                            <button onClick={()=>this.handleDelete()} className="ui red button">Delete Employee</button>
+                        </Link>
+                    </form>
+                </div>
             </div>  
         )
     }
@@ -78,6 +94,9 @@ class EmployeeEdit extends Component {
 }
 
 const mapStateToProps = (state) => {
+    if (!state.employee) {
+        return {}
+    }
     return {
         employee: state.employee
     }
@@ -128,6 +147,6 @@ const validate = (formProps) => {
 
 //EmployeeEdit = reduxForm({form: 'employee_edit'}, validate)(EmployeeEdit);
 
-export default connect(mapStateToProps, { fetchEmployee, updateEmployee, deleteEmployee })(form(EmployeeEdit));
+export default connect(mapStateToProps, { fetchEmployee, updateEmployee, deleteEmployee, clearEmployee })(form(EmployeeEdit));
 
 
