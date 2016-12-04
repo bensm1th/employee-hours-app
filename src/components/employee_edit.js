@@ -52,10 +52,8 @@ class EmployeeEdit extends Component {
     }
 
     render() {
-        console.log('render');
         const { handleSubmit } = this.props;
         if (!this.props.employee) {
-            console.log('diverted');
             return (<div>...loading</div>)
         }
         return (

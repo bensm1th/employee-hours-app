@@ -14,8 +14,6 @@ exports.signin = function(req, res, next) {
 }
 
 exports.signup = function(req, res, next) {
-    console.log('---------------req.body---------------');
-    console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
     if (!email || !password) {
@@ -26,8 +24,6 @@ exports.signup = function(req, res, next) {
         if (err) { return next(err) }
         // if a user with email does exist, return an error
         if (existingUser) {
-            console.log('---------------existing user---------------');
-            console.log(existingUser);
             const error = {error: 'Email is in use'}
             return res.status(422).send(error);
         }

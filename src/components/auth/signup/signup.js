@@ -36,8 +36,6 @@ class Signup extends Component {
 
     render() {
         const { handleSubmit } = this.props;
-        console.log('this.props');
-        console.log(this.props);
         return (
             <div className="ui container">
                 <div className='ui segment'>

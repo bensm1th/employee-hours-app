@@ -14,7 +14,6 @@ class EmployeeShow extends Component {
     }
 
     componentWillMount() {
-        console.log('mount');
         this.props.fetchEmployee(this.props.params.employee_id);
     }
 
@@ -28,7 +27,6 @@ class EmployeeShow extends Component {
     }
 
     render() {
-        console.log('render');
         if (!this.props.employee) {
             return (<div>...loading</div>)
         }

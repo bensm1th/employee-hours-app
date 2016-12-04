@@ -63,8 +63,7 @@ router.get('/employee/:id/edit', requireAuth, function(req, res) {
 
 //UPDATE
 router.put('/employee/:id', requireAuth, function(req, res) {
-    console.log('============ body of employee update ============')
-    console.log(req.body);
+
     Employee.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, employee) {
         if (err) {
             res.send('there was an error');

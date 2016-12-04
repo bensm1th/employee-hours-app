@@ -73,7 +73,6 @@ router.post('/timestamp', function(req, res) {
 //SHOW timestamps
 router.get('/timestamp/:id', function(req, res) {
     Employee.findById(req.params.id, function(err, employee) {
-        console.log(req.params.id);
         if (err) {
             console.log(err);
         } else {
