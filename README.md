@@ -1,25 +1,15 @@
-# ReduxSimpleStarter
+Welcome to the TLC Learning Center Info Managment App
 
-Interested in learning [Redux](https://www.udemy.com/react-redux/)?
+This app is built to manage employee and student information for TLC Learning Center.  
 
-###Getting Started###
+A manager will be able to sign up to gain access to the following features:
+*add new employees
+*update and delete current employees 
+*view a table of which employees are currently working
+*create a table of employee hours by entering a start and end date
+*update the table dynamically by double-clicking on cells to enter vacation, sick, and absent time
+*save and delete tables
 
-There are two methods for getting started with this repo.
-
-####Familiar with Git?#####
-Checkout this repo, install dependencies, then start the gulp process with the following:
-
-```
-	> git clone git@github.com:StephenGrider/ReduxSimpleStarter.git
-	> cd ReduxSimpleStarter
-	> npm install
-	> npm start
-```
-
-####Not Familiar with Git?#####
-Click [here](https://github.com/StephenGrider/ReactStarter/releases) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and:
-
-```
-	> npm install
-	> npm start
-```
+Employees will be able to:
+*clock-in 
+*clock-out
