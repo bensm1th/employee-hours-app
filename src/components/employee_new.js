@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { postEmployee } from '../actions/index';
@@ -6,8 +6,13 @@ import { Link } from 'react-router';
 
 class EmployeeNew extends Component {
 
+    static contextTypes = {
+        router: PropTypes.object
+    }
+
     handleFormSubmit(formProps) {
-        this.props.postEmployee(formProps);
+        this.props.postEmployee(formProps). 
+            then(response=> this.context.router.push('/employee'));
     }
 
     render() {

@@ -1,29 +1,28 @@
-var express     = require('express'),
-    router      = express.Router( {mergeParams: true} ),
-    mongoose    = require('mongoose'),
-    Timestamp   = require('../models/timestamps'),
-    Hours       = require('../models/hours'),
-    moment      = require('moment'),
-    Employee    = require('../models/employees'),
-    Table       = require('../models/tables');
+var express             = require('express'),
+    router              = express.Router( {mergeParams: true} ),
+    mongoose            = require('mongoose'),
+    Timestamp           = require('../models/timestamps'),
+    Hours               = require('../models/hours'),
+    moment              = require('moment'),
+    Employee            = require('../models/employees'),
+    Table               = require('../models/tables');
+    Authentication      = require('../controllers/authentication'),
+    passportService     = require('../services/passport'),
+    passport            = require('passport');
 
+const requireAuth = passport.authenticate('jwt', { session: false });
 /*----  RESTful routes  ----*/
 
 //INDEX route
-
-router.get('/hours/', function(req, res) {
+router.get('/hours/', requireAuth, function(req, res) {
     Table.find({}, function(err, tables) {
         res.send({tables});
     })
 });
 
-//NEW route
-router.get('/hours/new', function(req, res) {
-    res.render('hours/new');
-});
 
 //CREATE route
-router.post('/hours', function(req, res) {
+router.post('/hours', requireAuth, function(req, res) {
      Employee.find({}, function(err, employees) {
         if (err) {
             console.log(err);
@@ -60,20 +59,14 @@ router.post('/hours', function(req, res) {
 });
 
 //SHOW route
-router.get('/hours/:id', function(req, res) {
-    
+router.get('/hours/:id', requireAuth, function(req, res) {
     Table.findById(req.params.id, function(err, table) {
         res.send(table);
     })
 });
 
-//EDIT route
-router.get('hours/:hours_id/edit', function(req, res) {
-    res.send('you hit the hours EDIT route');
-});
-
 //UPDATE route
-router.put('/hours/:hours_id', function(req, res) {
+router.put('/hours/:hours_id', requireAuth, function(req, res) {
     Table.findByIdAndUpdate(req.params.hours_id, req.body, function(err, table) {
         if (err) {
             console.log(err) 
@@ -84,7 +77,7 @@ router.put('/hours/:hours_id', function(req, res) {
 });
 
 //DELETE route
-router.delete('/hours/:hours_id', function(req, res) {
+router.delete('/hours/:hours_id', requireAuth, function(req, res) {
     
     Table.findByIdAndRemove(req.params.hours_id, function(err, table) {
         console.log('----table----')

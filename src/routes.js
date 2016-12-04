@@ -13,20 +13,25 @@ import HoursIndex from './components/hours_index';
 import Signout from './components/auth/signout/signout';
 import Signin from './components/auth/signin/signin';
 import Signup from './components/auth/signup/signup';
+import Feature from './components/feature';
+import RequireAuth from './components/auth/require_auth';
+import NoAuth from './components/no_auth';
 
 export default (
     <Route path='/' component={App} >
         <IndexRoute component={IndexView} />
+        <Route path='restricted' component={NoAuth} />
+        <Route path='feature' component={RequireAuth(Feature)} />
         <Route path='signin' component={Signin} />
         <Route path='signup' component={Signup} />
         <Route path='signout' component={Signout} />
-        <Route path='hours' component={DisplayDates} />
-        <Route path='hours/index' component={HoursIndex} />
-        <Route path='hourstable/:id' component={HoursTable} />
-        <Route path='employee' component={EmployeeIndex} />
-        <Route path='employee/new' component={EmployeeNew} />
-        <Route path='employee/:employee_id' component={EmployeeShow} />
-        <Route path='employee/:employee_id/edit' component={EmployeeEdit}/>
+        <Route path='hours' component={RequireAuth(DisplayDates)} />
+        <Route path='hours/index' component={RequireAuth(HoursIndex)} />
+        <Route path='hourstable/:id' component={RequireAuth(HoursTable)} />
+        <Route path='employee' component={RequireAuth(EmployeeIndex)} />
+        <Route path='employee/new' component={RequireAuth(EmployeeNew)} />
+        <Route path='employee/:employee_id' component={RequireAuth(EmployeeShow)} />
+        <Route path='employee/:employee_id/edit' component={RequireAuth(EmployeeEdit)}/>
         <Route path='timestamp' component={TimestampNew} />
     </Route>
 )

@@ -21,3 +21,4 @@ export const CELL_BLUR = 'CELL_BLUR';
 export const UPDATE_HOURS = 'UPDATE_HOURS';
 export const AUTH_ERROR = 'AUTH_ERROR';
 export const CLEAR_ERROR = 'CLEAR_ERROR';
+export const FETCH_MESSAGE = 'FETCH_MESSAGE';

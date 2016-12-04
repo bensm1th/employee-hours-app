@@ -7,7 +7,6 @@ import { Link } from 'react-router';
 class HoursIndex extends Component {
 
     componentDidMount() {
-        localStorage.clear();
         this.props.fetchTables();
     }
 

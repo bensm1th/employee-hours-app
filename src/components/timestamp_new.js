@@ -12,10 +12,6 @@ class TimestampNew extends Component {
         this.handleMessageClose = this.handleMessageClose.bind(this);
     }
 
-    componentWillMount() {
-        localStorage.clear();
-    }
-
     handleClockSubmit(e, type) {
         e.preventDefault();
         const formProps = {

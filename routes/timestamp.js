@@ -6,12 +6,6 @@ var express     = require('express'),
 
 //RESTful routes
 
-//NEW route
-router.get('/timestamp/new', function(req, res) {
-    
-    res.render('timestamps/new', {employee: undefined, timestamp: undefined, logState: undefined});
-});
-
 //CREATE route
 router.post('/timestamp', function(req, res) {
     Employee.find({'employeeNumber': req.body.employeeNumber}, function(err, foundEmployee) {
@@ -90,8 +84,6 @@ router.get('/timestamp/:id', function(req, res) {
                     var one = timestamps[0].time;
                     var two = timestamps[1].time;
                     var diff = ((two - one)/1000)/60;
-                    console.log(two, one);
-                    console.log(diff);
                 }
                 res.send('you hit the timestamps show route');
             });
@@ -99,47 +91,6 @@ router.get('/timestamp/:id', function(req, res) {
     });
 });
 
-//this route will return all the timestamps between two given dates for an employee
-router.post('/timestamp2/:id', function(req, res) {
-    Employee.findById(req.params.id, function(err, employee) {
-        if (err) {
-            console.log(err);
-        } else {
-            Timestamp.find({'employee': req.params.id}, function(err, timestamps) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    var sorted = sortDates(timestamps);
-                    var makePeriods = createPeriods(req.body.beginning, req.body.end, sorted, req.params.id);
-                }
-                res.json(makePeriods);
-            });
-        }
-    });
-});
-
-router.post('/timestamp3/:id', function(req, res) {
-    Employee.findById(req.params.id, function(err, employee) {
-        if (err) {
-            console.log(err);
-        } else {
-            Timestamp.find({'employee': req.params.id}, function(err, timestamps) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    timestamps.forEach(stamp=> {
-                        console.log(stamp.time);
-                    });
-                    var sorted = sortDates(timestamps);
-                    sorted.forEach(stamp=> {
-                        console.log(stamp.time);
-                    });
-                }
-                res.send('you hit the timestamp3 route');
-            });
-        }
-    })
-});
 
 function getNumberOfDays(beginning, end) {
     var beginning = new Date(beginning);

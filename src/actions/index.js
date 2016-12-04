@@ -6,12 +6,27 @@ import {
     EMPLOYEE_POST, LOGSTATE_CLEAR, ID_CHANGE, TIMESTAMP_POST, 
     EMPLOYEE_UPDATE, EMPLOYEES_POST, EMPLOYEE_FETCH, 
     EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, 
-    GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, UPDATE_HOURS
+    GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
+    UPDATE_HOURS, FETCH_MESSAGE
  } from './types';
 const ROOT_URL = 'http://localhost:3000/hours';
 const EMPLOYEE_URL = 'http://localhost:3000/employee';
 const TIMESTAMP_URL = 'http://localhost:3000/timestamp';
 const AUTH_URL = 'http://localhost:3000';
+
+export function fetchMessage() {
+    return function(dispatch) {
+        axios.get(`${AUTH_URL}`, {
+            headers: { authorization: localStorage.getItem('token') }
+        }). 
+            then(response => {
+                dispatch({
+                    type: FETCH_MESSAGE,
+                    payload: response.data.message
+                })
+            });
+    }
+}
 
 
 export function clearAuthErrorMessage() {
@@ -40,7 +55,7 @@ export function signinUser({ email, password }) {
                 //in local storage?
                 localStorage.setItem('token', response.data.token);
                 //-redirect the user to the 'feature'
-                browserHistory.push('/');
+                browserHistory.push('/feature');
             })
             .catch(()=> {
                 //if request is bad
@@ -56,7 +71,7 @@ export function signupUser({ email, password }) {
         .then(response => {
             dispatch({ type: AUTH_USER });
             localStorage.setItem('token', response.data.token);
-            browserHistory.push('/');
+            browserHistory.push('/feature');
         })
         .catch(response => {
             console.log('response in action creator')
@@ -90,7 +105,8 @@ export function setHoursValues(date) {
 }
 
 export function deleteTable(id) {
-    const request = axios.delete(`${ROOT_URL}/${id}`);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.delete(`${ROOT_URL}/${id}`, options);
     return {
         type: TABLE_DELETE,
         payload: request
@@ -98,7 +114,8 @@ export function deleteTable(id) {
 }
 
 export function deleteEmployee(id) {
-    const request = axios.delete(`${EMPLOYEE_URL}/${id}`);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.delete(`${EMPLOYEE_URL}/${id}`, options);
     return {
         type: EMPLOYEE_DELETE,
         payload: request
@@ -106,7 +123,8 @@ export function deleteEmployee(id) {
 }
 
 export function fetchTables() {
-    const request = axios.get(`${ROOT_URL}`);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.get(`${ROOT_URL}`, options);
     return {
         type: TABLE_FETCH,
         payload: request
@@ -114,7 +132,8 @@ export function fetchTables() {
 }
 
 export function postEmployee(form) {
-    const request = axios.post(`${EMPLOYEE_URL}/new`, form);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.post(`${EMPLOYEE_URL}/new`, form, options);
     return {
         type: EMPLOYEE_POST,
         payload: request
@@ -144,7 +163,8 @@ export function postTimestamp(form) {
 }
 
 export function updateEmployee(id, form) {
-    const request = axios.put(`${EMPLOYEE_URL}/${id}`, form);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.put(`${EMPLOYEE_URL}/${id}`, form, options);
     return {
         type: EMPLOYEE_UPDATE,
         payload: request
@@ -152,7 +172,7 @@ export function updateEmployee(id, form) {
 }
 
 export function fetchEmployee(id) {
-    const request = axios.get(`${EMPLOYEE_URL}/${id}`);
+    const request = axios.get(`${EMPLOYEE_URL}/${id}`, { headers: { authorization: localStorage.getItem('token') } } );
     return {
         type: EMPLOYEE_FETCH,
         payload: request
@@ -168,7 +188,7 @@ export function clearEmployee() {
 }
 
 export function fetchEmployees() {
-    const request = axios.get(EMPLOYEE_URL);
+    const request = axios.get(EMPLOYEE_URL, { headers: { authorization: localStorage.getItem('token') } } );
     return {
         type: EMPLOYEES_FETCH,
         payload: request
@@ -176,7 +196,8 @@ export function fetchEmployees() {
 }
 
 export function postHours(beginning, end) {
-    const request = axios.post(ROOT_URL, {beginning, end});
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.post(ROOT_URL, {beginning, end}, options);
     return {
         type: POST_HOURS,
         payload: request
@@ -184,7 +205,8 @@ export function postHours(beginning, end) {
 }
 
 export function saveTable(hours) {
-    const request = axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options);
     return {
         type: SAVE_TABLE,
         payload: {hours}
@@ -192,7 +214,8 @@ export function saveTable(hours) {
 }
 
 export function fetchTableData(id) {
-    const request = axios.get(`${ROOT_URL}/${id}`);
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.get(`${ROOT_URL}/${id}`, options);
     return {
         type: GET_TABLE,
         payload: request

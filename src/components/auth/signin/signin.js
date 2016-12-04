@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { signinUser, clearAuthErrorMessage } from '../../../actions/index';
 import AlertMessage from '../../alert_message';
 
-
 class Signin extends Component {
 
     constructor(props) {
         super(props);
         this.handleMessageClose = this.handleMessageClose.bind(this);
     }
+
     handleFormSubmit({email, password }) {
         this.props.signinUser( { email, password });
     }
@@ -45,7 +45,7 @@ class Signin extends Component {
                     <Field name='email' type='text' component={renderField} label="Email"/>
                     <Field name='password' type='password' component={renderField} label="Password"/>
                     {this.renderAlert()}
-                    <button action='submit' className='ui green button'>Signin</button>
+                    <button action='submit' className='ui green button'>Sign-in</button>
                 </form>
             </div>
         )

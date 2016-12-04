@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 class Header extends Component {
     render() {
         const { path, authenticated } = this.props;
-        console.log('==================== authenticated ====================')
-        console.log(this.props);
         return (
             <Menu inverted pointing>
                 <Menu.Menu >

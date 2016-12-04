@@ -2,8 +2,7 @@
 /config
 bundle.js
 npm-debug.log
-public/moment
-public/combodate-1.0.7
+
 
 # IntelliJ
 *.iml

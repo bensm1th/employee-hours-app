@@ -14,14 +14,11 @@ class EmployeeEdit extends Component {
     }
     
     componentWillMount() {
-        console.log('mounted');
-        localStorage.clear();
         this.props.fetchEmployee(this.props.params.employee_id). 
             then(result=>this.handleInitialize());
     }
     
     handleInitialize() {
-        console.log('handle initialize');
         const hourlyPay = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : 0 ;
         const salary = this.props.employee.salary.applies ? this.props.employee.salary.rate : 0 ;
         const initData = {

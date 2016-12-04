@@ -7,12 +7,17 @@ import AlertMessage from '../../alert_message';
 
 class Signup extends Component {
 
+    constructor(props) {
+        super(props);
+        this.handleMessageClose = this.handleMessageClose.bind(this);
+    }
+
     handleFormSubmit(formProps) {
         this.props.signupUser(formProps);
     }
 
     handleMessageClose(e, type) {
-        this.props.clearSigninErrorMessage();
+        this.props.clearAuthErrorMessage();
     }
     
     renderAlert() {
@@ -31,6 +36,8 @@ class Signup extends Component {
 
     render() {
         const { handleSubmit } = this.props;
+        console.log('this.props');
+        console.log(this.props);
         return (
             <div className="ui container">
                 <div className='ui segment'>
