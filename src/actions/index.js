@@ -55,7 +55,7 @@ export function signinUser({ email, password }) {
                 //in local storage?
                 localStorage.setItem('token', response.data.token);
                 //-redirect the user to the 'feature'
-                browserHistory.push('/feature');
+                browserHistory.push('/');
             })
             .catch(()=> {
                 //if request is bad
@@ -71,11 +71,9 @@ export function signupUser({ email, password }) {
         .then(response => {
             dispatch({ type: AUTH_USER });
             localStorage.setItem('token', response.data.token);
-            browserHistory.push('/feature');
+            browserHistory.push('/');
         })
         .catch(response => {
-            console.log('response in action creator')
-            console.log(response.response.data.error);
             dispatch(authError(response.response.data.error)
         )});
     }

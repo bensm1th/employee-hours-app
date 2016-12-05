@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import Header from './header';
+import Footer from './footer';
 
 const App = ({children, location}) => {
     return (
       <div>
-        <Header path={location}/>
-        {children}
+          <div className="main">
+            <Header path={location}/>
+            {children}
+          </div>
+          <Footer />
       </div>
     );
 }

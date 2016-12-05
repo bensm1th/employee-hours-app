@@ -1,3 +1,19 @@
+.main{min-height:80vh; 
+      padding-bottom:60px; 
+      box-sizing:border-box;
+      
+    }
+
+.footer {
+  background-color: #212121;
+  position: absolute;
+  /* bottom: 0;  remove this */
+  margin-top: -50px; /* add this */
+  left: 0;
+  width: 100%;
+  padding: 15px 0;
+}
+
 form {
     margin-top: 20px;
 }
@@ -37,3 +53,4 @@ form {
 .error {
     color: red;
 }
+
