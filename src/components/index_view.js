@@ -24,7 +24,7 @@ class IndexView extends Component {
         return (
             <div className="ui container">
                 <div className='ui center aligned segment'>
-                    <h1> Welcome to TLC Info-Tracking</h1>
+                    <h1> Welcome to TLC Info-Tracking Demo!</h1>
                 </div>
                 <div className='ui segment'>
                     {this.renderWelcome()}

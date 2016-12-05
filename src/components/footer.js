@@ -8,47 +8,36 @@ class Footer extends Component {
         return (
             <div id="footer" className="ui inverted vertical footer segment">
                 <div className="ui center aligned container">
-                <div className="ui stackable inverted divided grid">
-                    <div className="three wide column">
-                    <h4 className="ui inverted header">Group 1</h4>
-                    <div className="ui inverted link list">
-                        <a href="#" className="item">Link One</a>
-                        <a href="#" className="item">Link Two</a>
-                        <a href="#" className="item">Link Three</a>
-                        <a href="#" className="item">Link Four</a>
-                    </div>
-                    </div>
-                    <div className="three wide column">
-                    <h4 className="ui inverted header">Group 2</h4>
-                    <div className="ui inverted link list">
-                        <a href="#" className="item">Link One</a>
-                        <a href="#" className="item">Link Two</a>
-                        <a href="#" className="item">Link Three</a>
-                        <a href="#" className="item">Link Four</a>
-                    </div>
-                    </div>
-                    <div className="three wide column">
-                    <h4 className="ui inverted header">Group 3</h4>
-                    <div className="ui inverted link list">
-                        <a href="#" className="item">Link One</a>
-                        <a href="#" className="item">Link Two</a>
-                        <a href="#" className="item">Link Three</a>
-                        <a href="#" className="item">Link Four</a>
-                    </div>
-                    </div>
-                    <div className="seven wide column">
-                    <h4 className="ui inverted header">Footer Header</h4>
-                    <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-                    </div>
-                </div>
-                <div className="ui inverted section divider"></div>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMZKsbpyve4NHcHgZPcPbTWlWA9-VNkmPm18G8crsQkwjVevfhyw" className="ui centered mini image"/>
-                <div className="ui horizontal inverted small divided link list">
-                    <a className="item" href="#">Site Map</a>
-                    <a className="item" href="#">Contact Us</a>
-                    <a className="item" href="#">Terms and Conditions</a>
-                    <a className="item" href="#">Privacy Policy</a>
-                </div>
+                    <div className="ui stackable inverted divided grid">
+                        <div className="three wide column">
+                        <h4 className="ui inverted header">By: Benjamin Smith</h4>
+                        <div className="ui inverted link list">
+                            <div className='item'>Email: whs.bsmith@gmail.com</div>
+                            <a href="http://www.bensmith.tech" className="item">Portfolio</a>
+                            <a href="https://github.com/bensm1th" className="item">Github</a>
+                            <a href="https://www.linkedin.com/in/benjamin-smith-a8386a57?trk=hp-identity-name" className="item">LinkedIn</a>
+                        </div>
+                        </div>
+                        <div className="three wide column">
+                        <h4 className="ui inverted header">For: TLC Learning Center</h4>
+                        <div className="ui inverted link list">
+                            <a href="http://tlclearningcenter.org/" className="item">Main Website</a>
+                        </div>
+                        </div>
+                        <div className="three wide column">
+                        <h4 className="ui inverted header">Technologies Used</h4>
+                        <div className="ui inverted link list">
+                            <a href="https://facebook.github.io/react/" className="item">React.js</a>
+                            <a href="https://nodejs.org/en/" className="item">Node.js</a>
+                            <a href="https://www.mongodb.com/" className="item">MongoDB</a>
+                            <a href="http://expressjs.com/" className="item">Express</a>
+                        </div>
+                        </div>
+                        <div className="seven wide column">
+                        <h4 className="ui inverted header">TLC Info-Tracking</h4>
+                        <p>The current version track employee information.  The next version will also track student information.</p>
+                        </div>
+                    </div>    
                 </div>
             </div>
         )
