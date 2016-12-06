@@ -16,7 +16,7 @@ var express         = require('express'),
     hoursRoute      = require('./routes/hours');
     authRoute       = require('./routes/auth');
 
-mongoose.connect(config.dbLocation);
+mongoose.connect(process.env.TLC_DB);
 
 app.use(cors());
 app.use(express.static(__dirname + "/public"));

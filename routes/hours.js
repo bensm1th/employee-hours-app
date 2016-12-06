@@ -80,12 +80,9 @@ router.put('/hours/:hours_id', requireAuth, function(req, res) {
 router.delete('/hours/:hours_id', requireAuth, function(req, res) {
     
     Table.findByIdAndRemove(req.params.hours_id, function(err, table) {
-        console.log('----table----')
-        console.log(table);
         if (err) {
             console.log(err);
         } else {
-            console.log(table);
             res.send('table deleted');
         }
     })
