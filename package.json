@@ -6,10 +6,7 @@
   "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
-    "test:watch": "npm run test -- --watch",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node app.js",
-    "client": "node start-client.js"
+    "test:watch": "npm run test -- --watch"
   },
   "author": "",
   "license": "ISC",
