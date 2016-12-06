@@ -9,10 +9,10 @@ import {
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE
  } from './types';
-const ROOT_URL = 'http://localhost:3000/hours';
-const EMPLOYEE_URL = 'http://localhost:3000/employee';
-const TIMESTAMP_URL = 'http://localhost:3000/timestamp';
-const AUTH_URL = 'http://localhost:3000';
+const ROOT_URL = '/hours';
+const EMPLOYEE_URL = '/employee';
+const TIMESTAMP_URL = '/timestamp';
+const AUTH_URL = '';
 
 export function fetchMessage() {
     return function(dispatch) {

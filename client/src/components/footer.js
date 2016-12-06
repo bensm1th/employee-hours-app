@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
-import { browserHistory } from 'react-router';
-import { connect } from 'react-redux';
 
 class Footer extends Component {
     render() {

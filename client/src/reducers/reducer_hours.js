@@ -31,6 +31,8 @@ const changeTable = (state={}, action) => {
                 return {...state, editable: !state.editable};
             }
             return {...state, editable: false};
+        default:
+            return state;
     }
 }
 
@@ -50,6 +52,7 @@ export default function(state={}, action) {
         case CELL_BLUR:
         case CELL_CLICKED:
             return {...state, data: {...state.data, data: [...state.data.data.map(e=>change(e, action)) ]}};
+        default:
+            return state;
     }
-    return state;
 }

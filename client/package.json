@@ -1,0 +1,30 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3001/",
+  "devDependencies": {
+    "react-scripts": "0.8.1"
+  },
+  "dependencies": {
+    "axios": "^0.15.2",
+    "node-uuid": "^1.4.7",
+    "promise": "^7.1.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-redux": "^4.0.0",
+    "react-router": "^2.0.1",
+    "redux": "^3.0.4",
+    "redux-form": "^6.2.0",
+    "redux-logger": "^2.7.4",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.1.0",
+    "semantic-ui-react": "^0.61.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

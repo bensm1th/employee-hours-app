@@ -5,10 +5,6 @@ import { Link } from 'react-router';
 
 class EmployeeShow extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     static contextTypes = {
         router: PropTypes.object
     }

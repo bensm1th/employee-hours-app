@@ -3,7 +3,6 @@ import  TableHeader  from './table_header';
 import { connect } from 'react-redux';
 import TableRow from './table_row';
 import TableCell from './table_cell';
-import { bindActionCreators } from 'redux';
 import { fetchTableData, cellClick, cellBlur, saveTable, deleteTable } from '../actions/index';
 import { v4 } from 'node-uuid';
 import { Link } from 'react-router';

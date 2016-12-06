@@ -6,7 +6,7 @@ var express         = require('express'),
     methodOverride  = require('method-override'),
     flash           = require('connect-flash'),
     config          = require('./config/config'),
-    port            = process.env.PORT || '3000',
+    port            = process.env.PORT || '3001',
     //add models
     Employee        = require('./models/employees'),
 
@@ -17,15 +17,9 @@ var express         = require('express'),
     authRoute       = require('./routes/auth');
 
 mongoose.connect(process.env.TLC_DB);
-
-app.use(cors());
-app.use(express.static(__dirname + "/public"));
+//app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true } ));
-app.set('view engine', 'ejs');
-app.use(methodOverride('_method'));
-app.use(flash());
-
 
 //enable routes
 app.use(employeeRoute);
@@ -33,6 +27,11 @@ app.use(timestampRoute);
 app.use(hoursRoute);
 app.use(authRoute)
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+}
+
 app.listen(port, function() {
     console.log('tlc listening on port ' + port);
 });
+

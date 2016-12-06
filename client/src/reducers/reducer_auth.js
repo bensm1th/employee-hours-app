@@ -13,7 +13,8 @@ export default function(state = initialState, action) {
         case CLEAR_ERROR:
             return {...state, error: ''};
         case FETCH_MESSAGE:
-            return {...state, message: action.payload}
+            return {...state, message: action.payload};
+        default:
+            return state;
     }
-    return state;
 }
