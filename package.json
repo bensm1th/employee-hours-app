@@ -15,7 +15,7 @@
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node app.js",
+    "server": "babel-node app.js",
     "client": "node start-client.js"
   },
   "author": "",
