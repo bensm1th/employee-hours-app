@@ -5,7 +5,6 @@ var express         = require('express'),
     mongoose        = require('mongoose'),
     methodOverride  = require('method-override'),
     flash           = require('connect-flash'),
-    config          = require('./config/config'),
     port            = process.env.PORT || '3001',
     //add models
     Employee        = require('./models/employees'),
