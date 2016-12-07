@@ -6,6 +6,7 @@ var express         = require('express'),
     methodOverride  = require('method-override'),
     flash           = require('connect-flash'),
     port            = process.env.PORT || '3001',
+    path            = require('path'),
     //add models
     Employee        = require('./models/employees'),
 
