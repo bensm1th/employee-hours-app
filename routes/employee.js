@@ -1,7 +1,7 @@
 var express             = require('express'),
     router              = express.Router( {mergeParams: true} ),
     mongoose            = require('mongoose'),
-    Employee            = require('../models/employees');
+    Employee            = require('../models/employees'),
     Authentication      = require('../controllers/authentication'),
     passportService     = require('../services/passport'),
     passport            = require('passport');

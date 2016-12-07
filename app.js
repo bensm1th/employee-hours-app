@@ -15,6 +15,7 @@ var express         = require('express'),
     hoursRoute      = require('./routes/hours');
     authRoute       = require('./routes/auth');
 
+
 mongoose.connect(process.env.TLC_DB);
 //app.use(cors());
 app.use(bodyParser.json());

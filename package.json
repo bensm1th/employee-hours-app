@@ -12,11 +12,9 @@
   "main": "index.js",
   "repository": "github.com/bensm1th/employee-hours-app",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
-    "test:watch": "npm run test -- --watch",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node app.js",
-    "client": "node start-client.js"
+    "client": "babel-node start-client.js"
   },
   "author": "",
   "license": "ISC",
@@ -37,7 +35,6 @@
     "babel-preset-stage-0": "6.5.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
-    "concurrently": "^3.1.0",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.1",
     "ejs": "^2.5.2",
