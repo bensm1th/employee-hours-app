@@ -8,7 +8,7 @@ import { AUTH_USER } from './actions/types';
 
 const configureStore = () => {
     const logger = createLogger();
-    const createStoreWithMiddleware = applyMiddleware(thunk, promise, logger)(createStore);
+    const createStoreWithMiddleware = applyMiddleware(thunk, promise)(createStore);
     const store = createStoreWithMiddleware(reducers);
     const token = localStorage.getItem('token');
 
