@@ -20,7 +20,6 @@ mongoose.connect(process.env.TLC_DB);
 //app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true } ));
-
 //enable routes
 app.use(employeeRoute);
 app.use(timestampRoute);
@@ -28,7 +27,10 @@ app.use(hoursRoute);
 app.use(authRoute)
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+    app.use(express.static('./client/build'));
+    app.get('/', function (req, res) {
+        res.sendFile(path.join(__dirname, './client/build', 'index.html'));
+    });
 }
 
 app.listen(port, function() {
