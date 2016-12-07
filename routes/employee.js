@@ -9,7 +9,8 @@ var express             = require('express'),
 const requireAuth = passport.authenticate('jwt', { session: false });
 
 //INDEX
-router.get('/employee', requireAuth, function(req, res) {
+router.get('/tlcemployee', requireAuth, function(req, res) {
+    console.log('============== got the employees =================')
     Employee.find({}, function(err, employees) {
         res.send({employees: employees});
     });
@@ -17,7 +18,8 @@ router.get('/employee', requireAuth, function(req, res) {
 
 
 //CREATE
-router.post('/employee/new', requireAuth, function(req, res) {
+router.post('/tlcemployee/new', requireAuth, function(req, res) {
+    console.log('================================================created an employee')
     const hourlyPay = req.body.hourlyPay ? { applies: true, rate: req.body.hourlyPay } : { applies: false };
     const salary = req.body.salary ? { applies: true, rate: req.body.salary } : { applies: false };
     var newEmployee = ({
@@ -44,7 +46,7 @@ router.post('/employee/new', requireAuth, function(req, res) {
 });
 
 //SHOW
-router.get('/employee/:employee_id', requireAuth, function(req, res) {
+router.get('/tlcemployee/:employee_id', requireAuth, function(req, res) {
     Employee.findById(req.params.employee_id).exec(function(err, employee) {
         if (err) {
             console.log(err);
@@ -55,14 +57,14 @@ router.get('/employee/:employee_id', requireAuth, function(req, res) {
 });
 
 //EDIT
-router.get('/employee/:id/edit', requireAuth, function(req, res) {
+router.get('/tlcemployee/:id/edit', requireAuth, function(req, res) {
     Employee.findById(req.params.id, function(err, employee) {
         res.render('employees/edit', {employee: employee});
     });
 });
 
 //UPDATE
-router.put('/employee/:id', requireAuth, function(req, res) {
+router.put('/tlcemployee/:id', requireAuth, function(req, res) {
 
     Employee.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, employee) {
         if (err) {
@@ -75,7 +77,7 @@ router.put('/employee/:id', requireAuth, function(req, res) {
 });
 
 //DESTROY route
-router.delete('/employee/:employee_id', requireAuth, function(req, res) {
+router.delete('/tlcemployee/:employee_id', requireAuth, function(req, res) {
     Employee.findByIdAndRemove(req.params.employee_id, function(err, employee) {
         if (err) {
             console.log(err);

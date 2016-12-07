@@ -10,7 +10,7 @@ import {
     UPDATE_HOURS, FETCH_MESSAGE
  } from './types';
 const ROOT_URL = '/hours';
-const EMPLOYEE_URL = '/employee';
+const EMPLOYEE_URL = '/tlcemployee';
 const TIMESTAMP_URL = '/timestamp';
 const AUTH_URL = '';
 
@@ -123,6 +123,8 @@ export function deleteEmployee(id) {
 export function fetchTables() {
     const options = { headers: { authorization: localStorage.getItem('token') } };
     const request = axios.get(`${ROOT_URL}`, options);
+    console.log('========== request fetch tables ==============')
+    console.log(request);
     return {
         type: TABLE_FETCH,
         payload: request

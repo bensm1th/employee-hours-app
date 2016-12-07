@@ -18,21 +18,21 @@ var express         = require('express'),
 
 
 mongoose.connect(process.env.TLC_DB);
-//app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true } ));
 
-    app.use(express.static('./client/build'));
-    app.get('/*', function (req, res) {
-        res.sendFile(path.join(__dirname, './client/build', 'index.html'));
-    });
+/*
+app.use(express.static('./client/build'));
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, './client/build', 'index.html'));
+});
+*/
+
 //enable routes
 app.use(employeeRoute);
 app.use(timestampRoute);
 app.use(hoursRoute);
 app.use(authRoute)
-
-
 
 app.listen(port, function() {
     console.log('tlc listening on port ' + port);
