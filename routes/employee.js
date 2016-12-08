@@ -10,7 +10,6 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 
 //INDEX
 router.get('/tlcemployee', requireAuth, function(req, res) {
-    console.log('============== got the employees =================')
     Employee.find({}, function(err, employees) {
         res.send({employees: employees});
     });
@@ -19,7 +18,6 @@ router.get('/tlcemployee', requireAuth, function(req, res) {
 
 //CREATE
 router.post('/tlcemployee/new', requireAuth, function(req, res) {
-    console.log('================================================created an employee')
     const hourlyPay = req.body.hourlyPay ? { applies: true, rate: req.body.hourlyPay } : { applies: false };
     const salary = req.body.salary ? { applies: true, rate: req.body.salary } : { applies: false };
     var newEmployee = ({

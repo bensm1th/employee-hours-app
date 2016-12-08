@@ -8,8 +8,6 @@ var express     = require('express'),
 
 //CREATE route
 router.post('/timestamp', function(req, res) {
-    console.log('=============== created a timestamp =================')
-    console.log('========ben smith=============')
     Employee.find({'employeeNumber': req.body.employeeNumber}, function(err, foundEmployee) {
         
         if (err) console.log(err);

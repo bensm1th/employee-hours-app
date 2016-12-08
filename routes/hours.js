@@ -15,7 +15,6 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 
 //INDEX route
 router.get('/hours/', requireAuth, function(req, res) {
-    console.log('hit the tablesfetch route')
     Table.find({}, function(err, tables) {
         res.send({tables});
     })
