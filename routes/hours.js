@@ -8,13 +8,14 @@ var express             = require('express'),
     Table               = require('../models/tables');
     Authentication      = require('../controllers/authentication'),
     passportService     = require('../services/passport'),
-    passport            = require('passport');
+    passport            = require('passport'),
+    rootURL             = '/tlchours/';
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 /*----  RESTful routes  ----*/
 
 //INDEX route
-router.get('/hours/', requireAuth, function(req, res) {
+router.get(`${rootURL}`, requireAuth, function(req, res) {
     Table.find({}, function(err, tables) {
         res.send({tables});
     })
@@ -22,7 +23,7 @@ router.get('/hours/', requireAuth, function(req, res) {
 
 
 //CREATE route
-router.post('/hours', requireAuth, function(req, res) {
+router.post(`${rootURL}`, requireAuth, function(req, res) {
      Employee.find({}, function(err, employees) {
         if (err) {
             console.log(err);
@@ -59,14 +60,14 @@ router.post('/hours', requireAuth, function(req, res) {
 });
 
 //SHOW route
-router.get('/hours/:id', requireAuth, function(req, res) {
+router.get(`${rootURL}:id`, requireAuth, function(req, res) {
     Table.findById(req.params.id, function(err, table) {
         res.send(table);
     })
 });
 
 //UPDATE route
-router.put('/hours/:hours_id', requireAuth, function(req, res) {
+router.put(`${rootURL}:hours_id`, requireAuth, function(req, res) {
     Table.findByIdAndUpdate(req.params.hours_id, req.body, function(err, table) {
         if (err) {
             console.log(err) 
@@ -77,7 +78,7 @@ router.put('/hours/:hours_id', requireAuth, function(req, res) {
 });
 
 //DELETE route
-router.delete('/hours/:hours_id', requireAuth, function(req, res) {
+router.delete(`${rootURL}:hours_id`, requireAuth, function(req, res) {
     
     Table.findByIdAndRemove(req.params.hours_id, function(err, table) {
         if (err) {

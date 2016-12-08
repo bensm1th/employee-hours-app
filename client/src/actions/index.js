@@ -9,7 +9,7 @@ import {
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE
  } from './types';
-const ROOT_URL = '/hours';
+const ROOT_URL = '/tlchours';
 const EMPLOYEE_URL = '/tlcemployee';
 const TIMESTAMP_URL = '/timestamp';
 const AUTH_URL = '';
