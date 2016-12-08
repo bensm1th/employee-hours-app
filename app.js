@@ -22,22 +22,15 @@ mongoose.connect(process.env.TLC_DB);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true } ));
 
-
-
-//app.use(serveStatic(path.join(__dirname, './client/build')))
 app.use(express.static(path.join(__dirname, './client/build')));
-/*
 
-*/
 //enable routes
 app.use(employeeRoute);
 app.use(timestampRoute);
 app.use(hoursRoute);
 app.use(authRoute);
 
-app.get('*', function (req, res) {
-    console.log('all hit');
-        
+app.get('*', function (req, res) {        
     res.sendFile(path.resolve(__dirname, './client/build/index.html'));
 });
 
