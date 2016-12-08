@@ -21,9 +21,10 @@ mongoose.connect(process.env.TLC_DB);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true } ));
 
-/*
+
 app.use(express.static('./client/build'));
-app.get('/*', function (req, res) {
+/*
+app.get('/*', function (req, res, next) {
     res.sendFile(path.join(__dirname, './client/build', 'index.html'));
 });
 */

@@ -1,0 +1,58 @@
+.main{min-height:90vh; 
+      padding-bottom:60px; 
+      box-sizing:border-box;
+      
+    }
+
+.footer {
+  background-color: #212121;
+  position: absolute;
+  /* bottom: 0;  remove this */
+  margin-top: -50px; /* add this */
+  left: 0;
+  width: 100%;
+  padding: 15px 0;
+}
+
+form {
+    margin-top: 20px;
+}
+
+#periodHeader {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.timeSelect {
+    font-size: 10px;
+}
+
+#employeeEdit {
+    margin-left: 45px;
+    color: red;
+    float: right;
+}
+
+#employeeEdit:hover {
+    color: darkred;
+    font-size: 15px;
+}
+
+#employeeInfo {
+    margin-left: 15px;
+    color: blue;
+    float: right;
+}
+
+#employeeInfo:hover {
+    margin-left: 15px;
+    color: darkblue;
+    font-size: 15px;
+}
+
+.error {
+    color: red;
+}
+
+
+
