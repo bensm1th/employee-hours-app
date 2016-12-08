@@ -7,6 +7,7 @@ var express         = require('express'),
     flash           = require('connect-flash'),
     port            = process.env.PORT || '3001',
     path            = require('path'),
+    serveStatic     = require('serve-static'),
     //add models
     Employee        = require('./models/employees'),
 
@@ -23,20 +24,22 @@ app.use(bodyParser.urlencoded( { extended: true } ));
 
 
 
-
+//app.use(serveStatic(path.join(__dirname, './client/build')))
 app.use(express.static(path.join(__dirname, './client/build')));
 /*
-app.all('/*', function (req, res, next) {
-    console.log('all hit');
-        
-    //res.sendFile(path.join(__dirname, './client/build', 'index.html'));
-});
+
 */
 //enable routes
 app.use(employeeRoute);
 app.use(timestampRoute);
 app.use(hoursRoute);
 app.use(authRoute);
+
+app.get('*', function (req, res) {
+    console.log('all hit');
+        
+    res.sendFile(path.resolve(__dirname, './client/build/index.html'));
+});
 
 app.listen(port, function() {
     console.log('tlc listening on port ' + port);
