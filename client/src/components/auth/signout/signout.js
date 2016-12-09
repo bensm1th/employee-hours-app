@@ -10,7 +10,11 @@ class Signout extends Component {
 
     render() {
         return (
-            <div> so sorry to see you go </div>
+            <div className='ui container'>
+                <div className='ui segment'>
+                    <h3> You have been signed out. </h3>
+                </div>
+            </div>
         )
     }
 }

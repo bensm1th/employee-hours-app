@@ -45,6 +45,7 @@ class Signup extends Component {
                     <Field name='email' type='text' component={renderField} label="Email"/>
                     <Field name='password' type='password' component={renderField} label="Password"/>
                     <Field name='passwordConfirm' type='password' component={renderField} label="Confirm Password" />
+                    <Field name='secret' type='password' component={renderField} label="Enter Secret" />
                     {this.renderAlert()}
                     <button action='submit' className='ui green button'>Sign up!</button>
                 </form>
@@ -77,6 +78,9 @@ const validate = (values) => {
     }
     if (values.password !== values.passwordConfirm) {
         errors.passwordConfirm = "Passwords don't match";
+    }
+    if (!values.secret) {
+        errors.secret = 'Please enter the secret';
     }
     return errors;
 }

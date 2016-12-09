@@ -35,10 +35,50 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   // See if the user ID in the payload exists in our database
   // If it does, call 'done' with that other
   // otherwise, call done without a user object
+  
   User.findById(payload.sub, function(err, user) {
     if (err) { return done(err, false); }
 
     if (user) {
+      console.log('token confirmed')
+      done(null, user);
+    } else {
+      done(null, false);
+    }
+  });
+});
+
+//create 'Owner' strategies
+//create local 'Owner' strategies
+const ownerLocalLogin = new LocalStrategy(localOptions, function(email, password, done) {
+  // Verify this email and password, call done with the user
+  // if it is the correct email and password
+  // otherwise, call done with false
+  User.findOne({ email: email }, function(err, user) {
+    if (err) { return done(err); }
+    if (!user) { return done(null, false); }
+    if (user.role !== 'Owner') {
+      return done(null, false)
+    }
+    // compare passwords - is `password` equal to user.password?
+    user.comparePassword(password, function(err, isMatch) {
+      if (err) { return done(err); }
+      if (!isMatch) { return done(null, false); }
+      console.log('owner local login confirmed');
+      return done(null, user);
+    });
+  });
+});
+
+
+//create JWT owner strategies 
+const ownerJwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
+  // See if the user ID in the payload exists in our database
+  // If it does, call 'done' with that other
+  // otherwise, call done without a user object
+  User.findById(payload.sub, function(err, user) {
+    if (err) { return done(err, false); }
+    if (user && user.role === 'Owner') {
       done(null, user);
     } else {
       done(null, false);
@@ -47,5 +87,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 });
 
 // Tell passport to use this strategy
-passport.use(jwtLogin);
-passport.use(localLogin);
+passport.use('manager_jwt', jwtLogin);
+passport.use('manager_local', localLogin);
+passport.use('owner_jwt', ownerJwtLogin);
+passport.use('owner_local',ownerLocalLogin);

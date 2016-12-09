@@ -12,7 +12,39 @@ exports.signin = function(req, res, next) {
     res.send({ token: tokenForUser(req.user) });
 }
 
+exports.ownerSignin = function(req, res, next) {
+    res.send({ ownerToken: tokenForUser(req.user) });
+}
+
 exports.signup = function(req, res, next) {
+    const email = req.body.email;
+    const password = req.body.password;
+    if (!email || !password) {
+        return res.status(422).send({ error: 'You must provide email and password'});
+    }
+    // See if user with given email exists
+    User.findOne({ email }, function(err, existingUser) {
+        if (err) { return next(err) }
+        // if a user with email does exist, return an error
+        if (existingUser || req.body.secret !== process.env.SECRET) {
+            const error = {error: 'There were errors'}
+            return res.status(422).send(error);
+        }
+         // if a user with email does not exist, create and save user record
+        const user = new User({
+            email,
+            password
+        });
+
+        user.save(function(err) {
+            if(err) {return next(err)};
+            // respond to request indicating user was created
+            res.json({ token: tokenForUser(user) });
+        });
+    });
+}
+
+exports.ownerSignup = function(req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
     if (!email || !password) {
@@ -26,15 +58,24 @@ exports.signup = function(req, res, next) {
             const error = {error: 'Email is in use'}
             return res.status(422).send(error);
         }
+        
          // if a user with email does not exist, create and save user record
          const user = new User({
              email,
              password
          });
-         user.save(function(err) {
-             if(err) {return next(err)};
-             // respond to request indicating user was created
-             res.json({ token: tokenForUser(user) });
-         });
+         
+         if ( req.body.secret === process.env.SECRET ) {
+            user.role = 'Owner'; 
+            user.save(function(err) {
+                if(err) {return next(err)};
+                // respond to request indicating user was created
+                return res.json({ ownerToken: tokenForUser(user) });
+            });
+        }
+        if ( req.body.secret !== process.env.SECRET ) {
+            const error = {error: 'Incorrect secret'}
+            return res.status(422).send(error);
+        }        
     });
 }

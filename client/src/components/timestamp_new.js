@@ -14,9 +14,10 @@ class TimestampNew extends Component {
 
     handleClockSubmit(e, type) {
         e.preventDefault();
+        const newTimestamp = new Date().getTime();
         const formProps = {
             employeeNumber: this.props.IdInput[0],
-            time: Date.now(),
+            time: newTimestamp,
             clock: type
         }
         this.props.postTimestamp(formProps). 

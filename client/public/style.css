@@ -4,6 +4,11 @@
       
     }
 
+#logo {
+    height: 15px;
+    width: 15px;
+}
+
 .footer {
   background-color: #212121;
   position: absolute;

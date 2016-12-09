@@ -27,17 +27,19 @@ class Header extends Component {
                         <Menu.Item onClick={()=> browserHistory.push('/signout')}>
                             Sign-out
                         </Menu.Item>
+                        <Menu.Item onClick={()=> browserHistory.push('/owner/index')}>
+                            <img id="logo" src='http://tlclearningcenter.org/favicon.ico'/>
+                        </Menu.Item>
                     </Menu.Menu>
                 ) : (<Menu.Menu position='right'>
                         <Menu.Item onClick={()=> browserHistory.push('/signin')}>
                             Sign-in
                         </Menu.Item>
-                        <Menu.Item onClick={()=> browserHistory.push('/signup')}>
-                            Sign-up
+                        <Menu.Item onClick={()=> browserHistory.push('/owner/index')}>
+                            <img id="logo" src='http://tlclearningcenter.org/favicon.ico'/>
                         </Menu.Item>
                     </Menu.Menu>)
                  } 
-                
             </Menu>
         )
     }
@@ -45,7 +47,8 @@ class Header extends Component {
 
 const mapStateToProps = (state) => (
     {
-        authenticated: state.auth.authenticated
+        authenticated: state.auth.authenticated,
+        owner: state.owner.authenticated
     }
 )
 

@@ -22,3 +22,7 @@ export const UPDATE_HOURS = 'UPDATE_HOURS';
 export const AUTH_ERROR = 'AUTH_ERROR';
 export const CLEAR_ERROR = 'CLEAR_ERROR';
 export const FETCH_MESSAGE = 'FETCH_MESSAGE';
+export const AUTH_OWNER = 'AUTH_OWNER';
+export const FETCH_OWNER_MESSAGE = 'FETCH_OWNER_MESSAGE';
+export const UNAUTH_OWNER = 'UNAUTH_OWNER';
+

@@ -11,6 +11,10 @@ class Signin extends Component {
         this.handleMessageClose = this.handleMessageClose.bind(this);
     }
 
+    componentWillMount() {
+        this.props.clearAuthErrorMessage();
+    }
+
     handleFormSubmit({email, password }) {
         this.props.signinUser( { email, password });
     }

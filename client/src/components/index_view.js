@@ -4,6 +4,13 @@ import { v4 } from 'node-uuid';
 import { connect } from 'react-redux';
 
 class IndexView extends Component {
+
+    renderOwnerWelcome() {
+        if (this.props.owner.authenticated) {
+            return <div><h3>Access Special <Link to='/owner'>Owner</Link> Page</h3></div>
+        }
+    }
+
     renderWelcome() {
         if (this.props.auth) {
             return (
@@ -20,6 +27,7 @@ class IndexView extends Component {
         return <h3>Please <Link to='/signin'>sign-in</Link> to access information management tools.</h3>
     }
     render() {
+        console.log('this.props')
         console.log(this.props);
         return (
             <div className="ui container">
@@ -29,6 +37,7 @@ class IndexView extends Component {
                 <div className='ui segment'>
                     {this.renderWelcome()}
                     <h3>Employees can clock-in/out <Link to='/timestamp'> here</Link>.</h3>
+                    {this.renderOwnerWelcome()}
                 </div>
             </div>
         )
@@ -37,7 +46,8 @@ class IndexView extends Component {
 
 const mapStateToProps = (state) => (
     {
-        auth: state.auth.authenticated
+        auth: state.auth.authenticated,
+        owner: state.owner
     }
 )
 

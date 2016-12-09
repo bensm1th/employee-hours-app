@@ -7,12 +7,14 @@ import {
     EMPLOYEE_UPDATE, EMPLOYEES_POST, EMPLOYEE_FETCH, 
     EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, 
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
-    UPDATE_HOURS, FETCH_MESSAGE
+    UPDATE_HOURS, FETCH_MESSAGE, AUTH_OWNER, FETCH_OWNER_MESSAGE,
+    UNAUTH_OWNER
  } from './types';
 const ROOT_URL = '/tlchours';
 const EMPLOYEE_URL = '/tlcemployee';
 const TIMESTAMP_URL = '/timestamp';
 const AUTH_URL = '';
+const OWNER_URL = '/tlcowner'
 
 export function fetchMessage() {
     return function(dispatch) {
@@ -28,18 +30,82 @@ export function fetchMessage() {
     }
 }
 
-
+export function fetchOwnerMessage() {
+    return function(dispatch) {
+        axios.get(`${OWNER_URL}`, {
+            headers: {
+                authorization: localStorage.getItem('ownerToken')
+            }
+        }). 
+            then(response=> {
+                dispatch({
+                    type: FETCH_OWNER_MESSAGE,
+                    payload: response.data.message
+                })
+            })
+    }
+}
 export function clearAuthErrorMessage() {
     return {
         type: CLEAR_ERROR
     }
 }
 
-export function signoutUser() {
-    localStorage.removeItem('token');
+export function signoutOwner() {
+    localStorage.removeItem('ownerToken');
 
     return {
-        type: UNAUTH_USER   
+        type: UNAUTH_OWNER
+    }
+}
+
+export function signoutUser() {
+    return function(dispatch) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('ownerToken');
+        dispatch({ type: UNAUTH_OWNER });
+        dispatch({ type: UNAUTH_USER })
+    }
+}
+
+export function signinOwner({ email, password }) {
+    return function(dispatch) {
+        //Submit email/password to the server
+        axios.post(`${OWNER_URL}/signin`, { email, password }) 
+            .then(response => {
+                //if request is good...
+                //-update state to indicate user authenticated
+                dispatch( { type: AUTH_OWNER });
+                dispatch( { type: AUTH_USER });
+                //-save the JWT token
+                //in local storage?
+                localStorage.setItem('ownerToken', response.data.ownerToken);
+                localStorage.setItem('token', response.data.ownerToken )
+
+                //-redirect the user to the 'feature'
+                browserHistory.push('/owner');
+            })
+            .catch(()=> {
+                //if request is bad
+                //-show an error to the user
+                dispatch(authError('Bad Signin Info'));
+            });
+    }
+}
+
+export function signupOwner({ email, password, secret }) {
+    return function(dispatch) {
+        axios.post(`${OWNER_URL}/signup`, { email, password, secret})
+        .then(response => {
+            dispatch({ type: AUTH_OWNER });
+            dispatch({ type: AUTH_USER });
+            localStorage.setItem('ownerToken', response.data.ownerToken);
+            localStorage.setItem('token', response.data.ownerToken );
+            browserHistory.push('/owner');
+        })
+        .catch(response => {
+            dispatch(authError(response.response.data.error)
+        )});
     }
 }
 
@@ -65,17 +131,13 @@ export function signinUser({ email, password }) {
     }
 }
 
-export function signupUser({ email, password }) {
+export function signupUser({ email, password, secret }) {
     return function(dispatch) {
-        axios.post(`${AUTH_URL}/signup`, { email, password })
-        .then(response => {
-            dispatch({ type: AUTH_USER });
-            localStorage.setItem('token', response.data.token);
-            browserHistory.push('/');
-        })
-        .catch(response => {
-            dispatch(authError(response.response.data.error)
-        )});
+        const options = { headers: { authorization: localStorage.getItem('ownerToken') } };
+        axios.post(`${AUTH_URL}/signup`, { email, password, secret }, options) 
+            .then(response => {
+                browserHistory.push('/owner');
+            }) 
     }
 }
 
@@ -123,8 +185,6 @@ export function deleteEmployee(id) {
 export function fetchTables() {
     const options = { headers: { authorization: localStorage.getItem('token') } };
     const request = axios.get(`${ROOT_URL}`, options);
-    console.log('========== request fetch tables ==============')
-    console.log(request);
     return {
         type: TABLE_FETCH,
         payload: request

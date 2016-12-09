@@ -7,6 +7,7 @@ import TimestampReducer from './reducer_timestamp';
 import TablesReducer from './reducer_tables';
 import DatesReducer from './reducer_date_set';
 import AuthReducer from './reducer_auth';
+import OwnerReducer from './reducer_auth_owner';
 import { reducer as formReducer } from 'redux-form';
 
 
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   timestamp: TimestampReducer,
   tables: TablesReducer,
   dates: DatesReducer,
-  auth: AuthReducer
+  auth: AuthReducer,
+  owner: OwnerReducer
 });
 
 export default rootReducer;

@@ -6,7 +6,7 @@ var express             = require('express'),
     passportService     = require('../services/passport'),
     passport            = require('passport');
 
-const requireAuth = passport.authenticate('jwt', { session: false });
+const requireAuth = passport.authenticate('manager_jwt', { session: false });
 
 //INDEX
 router.get('/tlcemployee', requireAuth, function(req, res) {

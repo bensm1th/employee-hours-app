@@ -2,6 +2,7 @@ import { AUTH_ERROR, AUTH_USER, UNAUTH_USER, CLEAR_ERROR, FETCH_MESSAGE } from '
 const initialState = {
     authenticated: false
 }
+
 export default function(state = initialState, action) {
     switch(action.type) {
         case AUTH_USER:

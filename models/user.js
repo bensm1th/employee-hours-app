@@ -5,10 +5,23 @@ const   mongoose        = require('mongoose'),
 // Define our model
 // I need lowercase: true, so that case insensitive emails are that are the same are recognized as different: ben@gmail.com, BEN@gmail.com
 const userSchema = new Schema({
-    email: { type: String, unique: true, lowercase: true },
-    password: String
+    email: { 
+        type: String, 
+        unique: true, 
+        lowercase: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ['Manager', 'Owner'],
+        default: 'Manager'
+    }
 });
-
+    
 // on save hook, encrypt password
 // before saving a model, run this function
 userSchema.pre('save', function(next) {
