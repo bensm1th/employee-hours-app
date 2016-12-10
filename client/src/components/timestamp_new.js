@@ -21,7 +21,7 @@ class TimestampNew extends Component {
             clock: type
         }
         this.props.postTimestamp(formProps). 
-            then(setTimeout(()=> this.props.clearLogState(), 2000)). 
+            then(setTimeout(()=> this.props.clearLogState(), 3000)). 
                 then(this.props.onIdChange(""));
     }
 
@@ -34,8 +34,8 @@ class TimestampNew extends Component {
     }
 
     render() {
-        const { handleSubmit, errorMessage, successMessage, success, show } = this.props;
-
+        const { handleSubmit, errorMessage, successMessage, success, show, time } = this.props;
+        const finalSuccessMessage = `${successMessage}: ${time}`;
         return (
             <div className="ui container">
                 <div className='ui center aligned segment'>
@@ -53,7 +53,7 @@ class TimestampNew extends Component {
                         <AlertMessage
                             handleMessageClose={this.handleMessageClose}
                             errorMessage={errorMessage}
-                            successMessage={successMessage}
+                            successMessage={finalSuccessMessage}
                             success={success}
                         />
                     ): (
@@ -75,8 +75,8 @@ const mapStateToProps = (state) => {
         errorMessage: state.timestamp.logState.error.message,
         success: state.timestamp.logState.success.state,
         successMessage: state.timestamp.logState.success.message, 
-        show: state.timestamp.logState.show
-        
+        show: state.timestamp.logState.show,
+        time: state.timestamp.logState.time
     }
 }
 

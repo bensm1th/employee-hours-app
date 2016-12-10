@@ -1,6 +1,7 @@
 var express     = require('express'),
     router      = express.Router( {mergeParams: true} ),
     mongoose    = require('mongoose'),
+    moment      = require('moment'),
     Employee    = require('../models/employees'),
     Timestamp   = require('../models/timestamps');
 
@@ -21,6 +22,8 @@ router.post('/timestamp', function(req, res) {
         }
         
         else {            
+            const exactTime = moment(req.body.time).format("DD MMM YYYY hh:mm a")
+            logState.time = exactTime;
             Timestamp.create({ time: req.body.time, employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
                 if (err) console.log(err);
                 else {

@@ -36,6 +36,7 @@ router.post(`${rootURL}`, requireAuth, function(req, res) {
                         console.log(err);
                         res.send({status: "error"})
                     } else {
+                        //sort out all the timestamps for this employee
                         var sorted = sortDates(timestamps);
                         var hours = createPeriods(req.body.beginning, req.body.end, sorted, employee._id, employee);
                         data.push({hours: hours});
@@ -102,9 +103,15 @@ function getNumberOfDays(beginning, end) {
 }
 
 function addDays(date, days) {
+    console.log('entered values');
+    console.log(date);
+    console.log(days);
     var result = new Date(date);
     result.setDate(result.getDate() + days);
-    return moment(result).format('MM/DD');
+    var answer = moment(result).format('MM/DD');
+    console.log('returned value');
+    console.log(answer);
+    return answer;
 }
 
 //this builds an array of all the dates, starting with the first, and ending with the last.  

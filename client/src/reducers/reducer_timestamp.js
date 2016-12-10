@@ -4,7 +4,8 @@ const initialState = {
     logState: {
         show: false,
         error: { message: ''},
-        success: { message: ''}
+        success: { message: ''},
+        time: ''
     }, 
     timestamp: {}
 }
