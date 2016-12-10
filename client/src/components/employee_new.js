@@ -3,6 +3,8 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { postEmployee } from '../actions/index';
 import { Link } from 'react-router';
+import AlertMessage from './alert_message';
+
 
 class EmployeeNew extends Component {
 
@@ -11,11 +13,25 @@ class EmployeeNew extends Component {
     }
 
     handleFormSubmit(formProps) {
-        this.props.postEmployee(formProps). 
-            then(response=> this.context.router.push('/employee'));
+        const sendForm = this.props.postEmployee(formProps);
+    }
+
+    renderAlert() {
+        if (this.props.error) {
+            const status = false;
+            return (
+                <AlertMessage
+                    success={status}
+                    errorMessage={this.props.error}
+                    successMessage={''}
+                />
+            );
+        }
     }
 
     render() {
+        console.log('state in employee signup');
+        console.log(this.props.error);
         const { handleSubmit } = this.props;
         return (
             <div className="ui container">
@@ -34,7 +50,7 @@ class EmployeeNew extends Component {
                         <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
                         <Field name="salary" component={renderField} label="Salary" type='text' />
                         <Field name="hourlyPay" component={renderField} label="Hourly Pay" type='text' />
-
+                        {this.renderAlert()}
                         <button action='submit' className='ui green button'>Add Employee</button>
                         <Link to='/employee'>
                             <button className='ui red button'>Cancel</button>
@@ -93,7 +109,7 @@ EmployeeNew = reduxForm({
 
 const mapStateToProps = (state) => (
     {
-        state
+        error: state.employee.error
     }
 )
 

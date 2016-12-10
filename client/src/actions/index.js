@@ -8,7 +8,7 @@ import {
     EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, 
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE, AUTH_OWNER, FETCH_OWNER_MESSAGE,
-    UNAUTH_OWNER
+    UNAUTH_OWNER, POST_EMPLOYEE_ERROR
  } from './types';
 const ROOT_URL = '/tlchours';
 const EMPLOYEE_URL = '/tlcemployee';
@@ -192,11 +192,27 @@ export function fetchTables() {
 }
 
 export function postEmployee(form) {
-    const options = { headers: { authorization: localStorage.getItem('token') } };
-    const request = axios.post(`${EMPLOYEE_URL}/new`, form, options);
+    return function(dispatch) {
+        const options = { headers: { authorization: localStorage.getItem('token') } };
+        axios.post(`${EMPLOYEE_URL}/new`, form, options) 
+            .then(response => {
+                dispatch({
+                    type: EMPLOYEE_POST,
+                    payload: response.data.message
+                });
+                browserHistory.push('/employee');
+            }) 
+            .catch(()=> {
+                console.log('error reached catch statement');
+                dispatch(postEmployeeError('Failed to create employee'));
+            });
+    }
+}
+
+function postEmployeeError(error) {
     return {
-        type: EMPLOYEE_POST,
-        payload: request
+        type: POST_EMPLOYEE_ERROR,
+        payload: error
     }
 }
 

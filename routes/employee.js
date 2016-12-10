@@ -20,27 +20,41 @@ router.get('/tlcemployee', requireAuth, function(req, res) {
 router.post('/tlcemployee/new', requireAuth, function(req, res) {
     const hourlyPay = req.body.hourlyPay ? { applies: true, rate: req.body.hourlyPay } : { applies: false };
     const salary = req.body.salary ? { applies: true, rate: req.body.salary } : { applies: false };
-    var newEmployee = ({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        employeeNumber: req.body.employeeNumber,
-        address: req.body.address,
-        phone: req.body.phone,
-        DOB: req.body.DOB,
-        sickDaysLeft: req.body.sickDaysLeft,
-        vacationDaysLeft: req.body.vacationDaysLeft,
-        hourlyPay: hourlyPay,
-        salary: salary,
-        timeStamps: [],
-        currentlyWorking: false
-    });
-    Employee.create(newEmployee, function(err, employee) {
-        if (err) {
-            console.log(err);
+    Employee.find({}, function(err, employees) {
+        const filterByEmployeeNumber = employees.filter(employee => {
+            return employee.employeeNumber == req.body.employeeNumber;
+        });
+        if (filterByEmployeeNumber.length) {
+            return res.status(422).json({message: 'That employee number is taken'});
         } else {
-            res.send('YOU\'VE HIT THE CREATE USER ROUTE');
+            return postEmployee();
         }
-    });
+    })
+
+    function postEmployee() {
+        var newEmployee = ({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            employeeNumber: req.body.employeeNumber,
+            address: req.body.address,
+            phone: req.body.phone,
+            DOB: req.body.DOB,
+            sickDaysLeft: req.body.sickDaysLeft,
+            vacationDaysLeft: req.body.vacationDaysLeft,
+            hourlyPay: hourlyPay,
+            salary: salary,
+            timeStamps: [],
+            currentlyWorking: false
+        });
+
+        Employee.create(newEmployee, function(err, employee) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send('YOU\'VE HIT THE CREATE USER ROUTE');
+            }
+        });
+    }
 });
 
 //SHOW

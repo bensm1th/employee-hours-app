@@ -64,6 +64,7 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
 );
 
 const validate = (values) => {
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
     const errors = {};
     if (!values.email) {
         errors.email = 'Please enter an email';
@@ -75,6 +76,9 @@ const validate = (values) => {
     }
     if (!values.passwordConfirm) {
         errors.passwordConfirm = 'Please enter a confirmation password';
+    }
+    if (!strongRegex.test(values.password)) {
+        errors.password = 'Password must be eight characters or longer and contain at least one of each of the following: lowercase letter, uppercase letter, number, special character';
     }
     if (values.password !== values.passwordConfirm) {
         errors.passwordConfirm = "Passwords don't match";
