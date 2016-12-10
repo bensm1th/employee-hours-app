@@ -25,7 +25,7 @@ router.post('/timestamp', function(req, res) {
             //const exactTime = moment.utc(req.body.time).format("DD MMM YYYY hh:mm a");
             const exactTime = req.body.timeOfDay;
             console.log('================ time in server ================')
-            console.log(req.body.timeOfDay);
+            console.log(req.body.time);
             logState.time = exactTime;
             Timestamp.create({ time: req.body.time, employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
                 if (err) console.log(err);
