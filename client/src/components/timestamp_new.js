@@ -14,14 +14,19 @@ class TimestampNew extends Component {
 
     handleClockSubmit(e, type) {
         e.preventDefault();
+        const time = new Date();
+        const timeOfDay = time.toLocaleTimeString();
+        console.log('timestamp in console');
+        console.log(timeOfDay);
         const newTimestamp = new Date().getTime();
         const formProps = {
             employeeNumber: this.props.IdInput[0],
             time: newTimestamp,
-            clock: type
+            clock: type,
+            timeOfDay: timeOfDay
         }
         this.props.postTimestamp(formProps). 
-            then(setTimeout(()=> this.props.clearLogState(), 3000)). 
+            then(setTimeout(()=> this.props.clearLogState(), 13000)). 
                 then(this.props.onIdChange(""));
     }
 
