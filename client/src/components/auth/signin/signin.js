@@ -43,10 +43,10 @@ class Signin extends Component {
         return (
             <div className="ui container">
                 <div className='ui segment'>
-                    <h1> Signin </h1>
+                    <h1> Manager Signin</h1> <strong>Demo email: </strong> example@example.com <strong>Demo password: </strong> !1asdASD 
                 </div>
                 <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="ui form">
-                    <Field name='email' type='text' component={renderField} label="Email"/>
+                    <Field name='email'  type='text' component={renderField} label="Email"/>
                     <Field name='password' type='password' component={renderField} label="Password"/>
                     {this.renderAlert()}
                     <button action='submit' className='ui green button'>Sign-in</button>
@@ -63,7 +63,7 @@ const form = reduxForm({
 const renderField = field => (
     <div>
         <label>{field.label}</label>
-        <input type={field.type} {...field.input}/>
+        <input placeholder={field.placeholder} type={field.type} {...field.input}/>
         {field.touched && field.error && <div className="error">{field.error}</div>}
     </div>
 );

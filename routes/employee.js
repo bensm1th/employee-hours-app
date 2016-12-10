@@ -21,11 +21,12 @@ router.post('/tlcemployee/new', requireAuth, function(req, res) {
     const hourlyPay = req.body.hourlyPay ? { applies: true, rate: req.body.hourlyPay } : { applies: false };
     const salary = req.body.salary ? { applies: true, rate: req.body.salary } : { applies: false };
     Employee.find({}, function(err, employees) {
+        if (err) console.log(err);
         const filterByEmployeeNumber = employees.filter(employee => {
             return employee.employeeNumber == req.body.employeeNumber;
         });
         if (filterByEmployeeNumber.length) {
-            return res.status(422).json({message: 'That employee number is taken'});
+            return res.status(422).send({message: 'That employee number is taken'});
         } else {
             return postEmployee();
         }

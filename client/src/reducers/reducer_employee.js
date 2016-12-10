@@ -1,20 +1,23 @@
-import { EMPLOYEE_CLEAR, EMPLOYEE_FETCH, EMPLOYEE_UPDATE, POST_EMPLOYEE_ERROR, EMPLOYEE_POST} from '../actions/types';
-
-export default function(state={}, action) {
+import { EMPLOYEE_CLEAR, EMPLOYEE_FETCH, EMPLOYEE_UPDATE, 
+    POST_EMPLOYEE_ERROR, EMPLOYEE_POST, EMPLOYEE_ERR_CLEAR } from '../actions/types';
+const initialState = {
+    error: ''
+}
+export default function(state = initialState, action) {
+    
     switch(action.type) {
         case EMPLOYEE_POST:
-            return {...state, error: action.payload}
+            return {...state, error: action.payload};
         case EMPLOYEE_FETCH:
             return Object.assign({}, action.payload.data.employee);
         case EMPLOYEE_UPDATE:
-            return {...action.payload.data};
+            return {...state};
         case EMPLOYEE_CLEAR:
             return state;
         case POST_EMPLOYEE_ERROR:
-            console.log('action.payload');
-            console.log(action.payload);
-            return {error: action.payload }
-        default:
-            return state;
+            return {...state, error: action.payload };
+        case EMPLOYEE_ERR_CLEAR:
+            return {...state, error: ''}
     }
+    return state;
 }

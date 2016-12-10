@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { postEmployee } from '../actions/index';
+import { postEmployee, clearEmployeeErrorMessage } from '../actions/index';
 import { Link } from 'react-router';
 import AlertMessage from './alert_message';
 
 
 class EmployeeNew extends Component {
-
-    static contextTypes = {
-        router: PropTypes.object
+    constructor(props) {
+        super(props);
+        this.handleMessageClose = this.handleMessageClose.bind(this);
     }
 
     handleFormSubmit(formProps) {
@@ -17,21 +17,24 @@ class EmployeeNew extends Component {
     }
 
     renderAlert() {
-        if (this.props.error) {
+        if (this.props.employeeError) {
             const status = false;
             return (
                 <AlertMessage
                     success={status}
-                    errorMessage={this.props.error}
+                    errorMessage={this.props.employeeError}
                     successMessage={''}
+                    handleMessageClose={this.handleMessageClose}
                 />
             );
         }
     }
 
+    handleMessageClose() {
+        this.props.clearEmployeeErrorMessage();
+    }
+
     render() {
-        console.log('state in employee signup');
-        console.log(this.props.error);
         const { handleSubmit } = this.props;
         return (
             <div className="ui container">
@@ -62,7 +65,11 @@ class EmployeeNew extends Component {
     }
 }
 
-
+function mapStateToProps(state) {
+    return {
+        employeeError: state.employee.error
+    }
+}
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
     <div>
@@ -84,6 +91,11 @@ const validate = (values) => {
     if (!values.employeeNumber) {
         errors.employeeNumber = 'Please enter an employee number';
     }
+    if (values.employeeNumber) {
+        if (values.employeeNumber.length !== 4) {
+            errors.employeeNumber = 'Employee number must be four digits long.';
+        }
+    }
     if (!values.address) {
         errors.address = 'Please enter an address';
     }
@@ -103,14 +115,8 @@ const validate = (values) => {
 }
 
 EmployeeNew = reduxForm({
-    form: 'employee_new',
+    form: 'employee_new_form',
     validate
 })(EmployeeNew);
 
-const mapStateToProps = (state) => (
-    {
-        error: state.employee.error
-    }
-)
-
-export default connect(mapStateToProps, { postEmployee })(EmployeeNew);
+export default connect(mapStateToProps, { postEmployee, clearEmployeeErrorMessage })(EmployeeNew);

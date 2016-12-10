@@ -24,11 +24,16 @@ class IndexView extends Component {
             )
             
         }
-        return <h3>Please <Link to='/signin'>sign-in</Link> to access information management tools.</h3>
+        return (
+            <div>
+                <h3>Please <Link to='/signin'>sign-in</Link> to access information management tools.</h3>
+                <h3> Use the following credentials to test out this demo: </h3>
+                <li className='item'><strong>email:</strong> example@example.com</li>
+                <li className='item'><strong>password:</strong> 1!asdASD</li>
+            </div>
+            )
     }
     render() {
-        console.log('this.props')
-        console.log(this.props);
         return (
             <div className="ui container">
                 <div className='ui center aligned segment'>

@@ -9,7 +9,6 @@ export default function(ComposedComponent) {
 
     componentWillMount() {
       if (!this.props.authenticated) {
-        console.log('blocked');
         this.context.router.push('/restricted');
       }
     }

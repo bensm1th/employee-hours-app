@@ -8,13 +8,20 @@ import {
     EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, 
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE, AUTH_OWNER, FETCH_OWNER_MESSAGE,
-    UNAUTH_OWNER, POST_EMPLOYEE_ERROR
+    UNAUTH_OWNER, POST_EMPLOYEE_ERROR, EMPLOYEE_ERR_CLEAR
  } from './types';
 const ROOT_URL = '/tlchours';
 const EMPLOYEE_URL = '/tlcemployee';
 const TIMESTAMP_URL = '/timestamp';
 const AUTH_URL = '';
-const OWNER_URL = '/tlcowner'
+const OWNER_URL = '/tlcowner';
+
+export function clearEmployeeErrorMessage() {
+    return {
+        type: EMPLOYEE_ERR_CLEAR
+    }
+}
+
 
 export function fetchMessage() {
     return function(dispatch) {
@@ -71,8 +78,8 @@ export function signoutUser() {
 export function signinOwner({ email, password }) {
     return function(dispatch) {
         //Submit email/password to the server
-        axios.post(`${OWNER_URL}/signin`, { email, password }) 
-            .then(response => {
+        axios.post(`${OWNER_URL}/signin`, { email, password }). 
+            then(response => {
                 //if request is good...
                 //-update state to indicate user authenticated
                 dispatch( { type: AUTH_OWNER });
@@ -106,6 +113,26 @@ export function signupOwner({ email, password, secret }) {
         .catch(response => {
             dispatch(authError(response.response.data.error)
         )});
+    }
+}
+
+export function postEmployee(form) {
+    return function(dispatch) {
+        axios.post(`${EMPLOYEE_URL}/new`, form, { headers: { authorization: localStorage.getItem('token') } }) 
+            .then(response => {
+                dispatch({ type: EMPLOYEE_POST, payload: response.data.message });
+                browserHistory.push('/employee');
+            }) 
+            .catch(response=> {
+                dispatch(postEmployeeError(response.response.data.message));
+            });
+    }
+}
+
+function postEmployeeError(error) {
+    return {
+        type: POST_EMPLOYEE_ERROR,
+        payload: error
     }
 }
 
@@ -188,31 +215,6 @@ export function fetchTables() {
     return {
         type: TABLE_FETCH,
         payload: request
-    }
-}
-
-export function postEmployee(form) {
-    return function(dispatch) {
-        const options = { headers: { authorization: localStorage.getItem('token') } };
-        axios.post(`${EMPLOYEE_URL}/new`, form, options) 
-            .then(response => {
-                dispatch({
-                    type: EMPLOYEE_POST,
-                    payload: response.data.message
-                });
-                browserHistory.push('/employee');
-            }) 
-            .catch(()=> {
-                console.log('error reached catch statement');
-                dispatch(postEmployeeError('Failed to create employee'));
-            });
-    }
-}
-
-function postEmployeeError(error) {
-    return {
-        type: POST_EMPLOYEE_ERROR,
-        payload: error
     }
 }
 
