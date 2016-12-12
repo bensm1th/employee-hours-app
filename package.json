@@ -45,6 +45,7 @@
     "lodash": "^3.10.1",
     "method-override": "^2.3.6",
     "moment": "^2.15.2",
+    "moment-timezone": "^0.5.10",
     "mongoose": "^4.6.6",
     "morgan": "^1.7.0",
     "node-uuid": "^1.4.7",

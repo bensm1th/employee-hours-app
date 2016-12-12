@@ -1,7 +1,7 @@
 var express     = require('express'),
     router      = express.Router( {mergeParams: true} ),
     mongoose    = require('mongoose'),
-    moment      = require('moment'),
+    moment      = require('moment-timezone'),
     Employee    = require('../models/employees'),
     Timestamp   = require('../models/timestamps');
 
@@ -24,10 +24,13 @@ router.post('/timestamp', function(req, res) {
         else {            
             //const exactTime = moment.utc(req.body.time).format("DD MMM YYYY hh:mm a");
             const exactTime = req.body.timeOfDay;
-            console.log('================ time in server ================')
-            console.log(req.body.time);
+            const localTimePST = moment.tz(req.body.time, 'America/Los_Angeles').format("YYYY-MM-DD HH:mm:ss");;
+            console.log('================ localTimePST ================')
+            console.log(localTimePST);
             logState.time = exactTime;
-            Timestamp.create({ time: req.body.time, employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
+            Timestamp.create({ time: localTimePST, employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
+                console.log('===============newlyCreatedTimestamp===============');
+                console.log(newlyCreatedTimestamp.time);
                 if (err) console.log(err);
                 else {
                     
