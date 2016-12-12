@@ -8,13 +8,15 @@ import {
     EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, 
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE, AUTH_OWNER, FETCH_OWNER_MESSAGE,
-    UNAUTH_OWNER, POST_EMPLOYEE_ERROR, EMPLOYEE_ERR_CLEAR
+    UNAUTH_OWNER, POST_EMPLOYEE_ERROR, EMPLOYEE_ERR_CLEAR, COMMENT_ADD,
+    COMMENT_TEXT_INPUT, COMMENT_ADD_EMPLOYEE, COMMENT_CLEAR
  } from './types';
 const ROOT_URL = '/tlchours';
 const EMPLOYEE_URL = '/tlcemployee';
 const TIMESTAMP_URL = '/timestamp';
 const AUTH_URL = '';
 const OWNER_URL = '/tlcowner';
+import { v4 } from 'node-uuid';
 
 export function clearEmployeeErrorMessage() {
     return {
@@ -288,6 +290,44 @@ export function saveTable(hours) {
     return {
         type: SAVE_TABLE,
         payload: {hours}
+    }
+}
+
+export function addComment(comment, employee) {
+    return function(dispatch) {
+        dispatch({
+            type: COMMENT_ADD,
+            payload: {comment: comment, employee: employee, id: v4() }
+        });
+        dispatch({
+            type: COMMENT_TEXT_INPUT,
+            payload: ''
+        });
+        dispatch({
+            type: COMMENT_ADD_EMPLOYEE,
+            payload: ''
+        })
+    } 
+}
+
+export function commentClear(id) {
+    return {
+        type: COMMENT_CLEAR,
+        payload: id
+    }
+}
+
+export function addCommentEmployee(employee) {
+    return {
+        type: COMMENT_ADD_EMPLOYEE,
+        payload: employee
+    }
+}
+
+export function onTextInput(text) {
+    return {
+        type: COMMENT_TEXT_INPUT,
+        payload: text
     }
 }
 

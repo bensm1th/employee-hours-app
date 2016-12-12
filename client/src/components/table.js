@@ -3,9 +3,10 @@ import  TableHeader  from './table_header';
 import { connect } from 'react-redux';
 import TableRow from './table_row';
 import TableCell from './table_cell';
-import { fetchTableData, cellClick, cellBlur, saveTable, deleteTable } from '../actions/index';
+import { fetchTableData, cellClick, cellBlur, saveTable, deleteTable, fetchEmployees, addComment, onTextInput, addCommentEmployee, commentClear } from '../actions/index';
 import { v4 } from 'node-uuid';
 import { Link } from 'react-router';
+import InputSelect from './table_input_select';
 
 
 const renderHeaders = (datesArr) => {
@@ -19,6 +20,9 @@ class HoursTable extends Component {
     constructor(props) {
         super(props);
         this.renderEmployees = this.renderEmployees.bind(this);
+        this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+        this.setValues = this.setValues.bind(this);
+        this.handleCommentRemove = this.handleCommentRemove.bind(this); 
     }
 
     static contextTypes = {
@@ -27,6 +31,7 @@ class HoursTable extends Component {
 
     componentWillMount() {
         this.props.fetchTableData(this.props.params.id);
+        this.props.fetchEmployees();
     }
 
 
@@ -74,6 +79,85 @@ class HoursTable extends Component {
             then(this.context.router.push('/hours/index'));
     }
 
+    renderComments() {
+        //this will probably need to loop over an array, and create one set of key/value pairs for each object in the array
+        // AND, it will need to have a form with that select things an input
+        const employees = this.props.employees.map(employee=> {
+            return `${employee.lastName}, ${employee.firstName}`;
+        });
+        return (
+            <div>
+                <form  onSubmit={(e)=> {
+                    e.preventDefault();
+                    this.handleCommentSubmit();
+                }}>
+                    <div className='ui right labeled fluid input'>
+                        <InputSelect
+                            id='category' 
+                            options={employees}
+                            logValue={this.setValues}
+                            type={'comment'}
+                            unit={'employee'}
+                            category={'Employee'}
+                        />
+                        <input
+                            type='text'
+                            onChange={(e)=>this.props.onTextInput(e.target.value)}
+                            value={this.props.comment}
+                        />
+                        <div 
+                            className="ui tag label"
+                            onClick={this.handleCommentSubmit}
+                        >Add Comment</div>
+                    </div>
+                </form>
+                {this.props.comments.length ? (
+                    <table className="ui basic table">
+                        <thead>
+                            <tr>
+                            <th>Employee</th>
+                            <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    {this.renderSubmittedComments()}
+                        </tbody>
+                    </table>
+                ): ('')}
+            </div>
+        );
+    }
+    renderSubmittedComments() {
+        const commentArr = this.props.comments.map(comment=> {
+            if (comment.id){
+            return (
+                <tr id='misc' key={comment.id}>
+                    <td className='collapsing'> {comment.employee}</td>
+                    <td> {comment.comment} 
+                        <i 
+                            id="commentRemove" 
+                            className="large remove icon"
+                            onClick={()=>this.handleCommentRemove(comment.id)}
+                        ></i>
+                    </td>
+                </tr>
+            )}
+        })
+        return commentArr;
+    }
+    
+    handleCommentRemove(id) {
+        this.props.commentClear(id);
+    }
+
+    handleCommentSubmit() {
+        this.props.addComment(this.props.comment, this.props.employee)
+    }
+
+    setValues(value, kind, type, unit) {
+        this.props.addCommentEmployee(value);
+    }
+
     render() {
         const { hours, hours: { status } } = this.props;
         const employeeData = status === 200 ? this.renderEmployees(hours.data.data) : <tr><td><div> employee name! </div></td></tr>;
@@ -103,6 +187,7 @@ class HoursTable extends Component {
                 <div className='ui center aligned segment'>
                     <p> Double-click on any cell to add vacation, sick, absent, or holiday time </p>
                 </div>
+                
                 <button 
                     className="ui green button"
                     onClick={()=> this.props.saveTable(hours)}
@@ -114,6 +199,12 @@ class HoursTable extends Component {
                     className='ui red button'
                     onClick={()=>this.handleDelete()}
                  >Delete</button>
+                 <div className='ui center aligned segment'>
+                    <h1> ADD MISCELLANEOUS ITEMS </h1>
+                 </div>
+                <div className='ui segment'>
+                    {this.renderComments()}
+                </div>
             </div>
         )
     }
@@ -122,8 +213,24 @@ class HoursTable extends Component {
 const mapStateToProps = (state) => {
     return {
         hours: state.hours,
+        employees: state.employees,
+        comment: state.comment.comment,
+        employee: state.comment.employee,
+        state: state,
+        comments: state.hours.data.comments
     }
 }
 
-export default connect(mapStateToProps, { fetchTableData, cellClick, cellBlur, saveTable, deleteTable })(HoursTable);
+export default connect(mapStateToProps, { 
+    fetchTableData, 
+    cellClick, 
+    cellBlur, 
+    saveTable, 
+    deleteTable, 
+    fetchEmployees, 
+    addComment, 
+    onTextInput,
+    addCommentEmployee,
+    commentClear
+})(HoursTable);
 

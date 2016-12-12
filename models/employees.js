@@ -12,7 +12,8 @@ var employeeSchema = new mongoose.Schema({
     vacationDaysLeft: Number,
     hourlyPay: { applies: Boolean, rate: Number},
     salary: { applies: Boolean, rate: Number},
-    currentlyWorking: Boolean
+    currentlyWorking: Boolean,
+    comments: Array
 });
 
 module.exports = mongoose.model('Employee', employeeSchema);

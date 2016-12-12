@@ -59,5 +59,20 @@ form {
     color: red;
 }
 
+#misc:hover #commentRemove {
+    display: inline;
+}
+
+#commentRemove {
+    display: none;
+}
+
+#misc:hover {
+    color: red;
+}
+
+
+
+
 
 

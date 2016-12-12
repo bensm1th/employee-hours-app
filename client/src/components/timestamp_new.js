@@ -16,10 +16,8 @@ class TimestampNew extends Component {
         e.preventDefault();
         const time = new Date();
         const timeOfDay = time.toLocaleTimeString();
-        console.log('timestamp in console');
       
         const newTimestamp = new Date().getTime();
-        console.log(newTimestamp);
         const formProps = {
             employeeNumber: this.props.IdInput[0],
             time: newTimestamp,

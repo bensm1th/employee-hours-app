@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import HoursReducer from './reducer_hours';
 import EmployeesReducer from './reducer_employees';
 import IdChangeReducer from './reducer_id_input';
+import CommentInputReducer from './reducer_comment_input';
 import TimestampReducer from './reducer_timestamp';
 import TablesReducer from './reducer_tables';
 import DatesReducer from './reducer_date_set';
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   tables: TablesReducer,
   dates: DatesReducer,
   auth: AuthReducer,
-  owner: OwnerReducer
+  owner: OwnerReducer,
+  comment: CommentInputReducer
 });
 
 export default rootReducer;

@@ -1,4 +1,4 @@
-import { UPDATE_HOURS, CELL_BLUR, CELL_CLICKED, SAVE_TABLE, POST_HOURS, GET_TABLE } from '../actions/types';
+import { UPDATE_HOURS, CELL_BLUR, CELL_CLICKED, SAVE_TABLE, POST_HOURS, GET_TABLE, COMMENT_ADD, COMMENT_CLEAR } from '../actions/types';
 
 const timeType = (payload) => {
     const totalTime = payload.update.hours + ":" + payload.update.mins;
@@ -40,14 +40,28 @@ const change = (state={}, action) => {
     return {...state, hours: {...state.hours, tableArr: [...state.hours.tableArr.map(e=>changeTable(e, action))] }};
 }
 
-export default function(state={}, action) {
+const initialState = {
+    data: {comments: [], data: [], dates: [], salariedEmployee: []}
+}
+
+const deleteComment = (comment, action) => {
+    if (comment.id !== action.payload) {
+        return comment;
+    }
+    return {};
+}
+export default function(state=initialState, action) {
     switch(action.type) {
+        case COMMENT_CLEAR:
+            return {...state, data: {...state.data, comments: [...state.data.comments.map(comment=> deleteComment(comment, action))]}};
         case SAVE_TABLE:
             return Object.assign({}, state, action.payload);
         case POST_HOURS:
             return Object.assign({}, state, action.payload);
         case GET_TABLE:
             return Object.assign({}, state, action.payload);
+        case COMMENT_ADD:       
+            return {...state, data: {...state.data, comments: [...state.data.comments, action.payload]}};
         case UPDATE_HOURS:
         case CELL_BLUR:
         case CELL_CLICKED:
@@ -56,3 +70,5 @@ export default function(state={}, action) {
             return state;
     }
 }
+
+
