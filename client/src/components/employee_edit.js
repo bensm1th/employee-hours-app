@@ -14,13 +14,13 @@ class EmployeeEdit extends Component {
     }
     
     componentWillMount() {
-        this.props.fetchEmployee(this.props.params.employee_id). 
-            then(result=>this.handleInitialize());
+        this.props.fetchEmployee(this.props.params.employee_id) 
+            .then(result=>this.handleInitialize());
     }
     
     handleInitialize() {
-        const hourlyPay = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : 0 ;
-        const salary = this.props.employee.salary.applies ? this.props.employee.salary.rate : 0 ;
+        const payAmount = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : this.props.employee.salary.monthlyRate;
+        const payType = this.props.employee.hourlyPay.applies ? 'hourly' : 'salary';
         const initData = {
             'firstName': this.props.employee.firstName,
             'lastName': this.props.employee.lastName,
@@ -30,8 +30,7 @@ class EmployeeEdit extends Component {
             'DOB': this.props.employee.DOB,
             'sickDaysLeft': this.props.employee.sickDaysLeft,
             'vacationDaysLeft': this.props.employee.vacationDaysLeft,
-            'hourlyPay': hourlyPay,
-            'salary': salary,
+            [payType]: payAmount,
             'currentlyWorking': this.props.employee.currentlyWorking,
         }
         this.props.initialize(initData);
@@ -53,6 +52,8 @@ class EmployeeEdit extends Component {
 
     render() {
         const { handleSubmit } = this.props;
+        const payType = this.props.employee.hourlyPay.applies ? 'hourly' : 'salary';
+        const payLabel = this.props.employee.hourlyPay.applies ? 'Hourly' : 'Salary';
         if (!this.props.employee) {
             return (<div>...loading</div>)
         }
@@ -71,8 +72,7 @@ class EmployeeEdit extends Component {
                         <Field name="DOB" component={renderField} label="Date of Birth" type="text"/>
                         <Field name="sickDaysLeft" component={renderField}  label="Sick Days Left" type="text"/>
                         <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
-                        <Field name="hourlyPay" component={renderField} label="Hourly Pay" />
-                        <Field name="salary" component={renderField} label="Salary" />
+                        <Field name={payType} component={renderField} label={payLabel} />
                         <button action='submit' className='ui green button'>Save Changes</button>
                         <Link to={`/employee/${this.props.employee._id}` }>
                             <button className='ui orange button'>Cancel</button>

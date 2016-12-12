@@ -25,7 +25,7 @@ class TimestampNew extends Component {
             timeOfDay: timeOfDay
         }
         this.props.postTimestamp(formProps). 
-            then(setTimeout(()=> this.props.clearLogState(), 13000)). 
+            then(setTimeout(()=> this.props.clearLogState(), 3000)). 
                 then(this.props.onIdChange(""));
     }
 

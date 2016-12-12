@@ -18,8 +18,8 @@ router.get('/tlcemployee', requireAuth, function(req, res) {
 
 //CREATE
 router.post('/tlcemployee/new', requireAuth, function(req, res) {
-    const hourlyPay = req.body.hourlyPay ? { applies: true, rate: req.body.hourlyPay } : { applies: false };
-    const salary = req.body.salary ? { applies: true, rate: req.body.salary } : { applies: false };
+    const hourlyPay = req.body.hourlyPay ? req.body.hourlyPay : { applies: false };
+    const salary = req.body.salary ? req.body.salary : { applies: false };
     Employee.find({}, function(err, employees) {
         if (err) console.log(err);
         const filterByEmployeeNumber = employees.filter(employee => {

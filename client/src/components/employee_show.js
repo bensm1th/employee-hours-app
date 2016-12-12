@@ -27,7 +27,8 @@ class EmployeeShow extends Component {
             return (<div>...loading</div>)
         }
         const currentlyWorking = this.props.employee.currentlyWorking ? "yes" : "no";
-        const salary = this.props.employee.salary.applies ? this.props.employee.salary.rate : 0;
+        const payType = this.props.employee.hourlyPay.applies ? 'Hourly Pay' : 'Salary';
+        const pay = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : this.props.employee.salary.monthlyRate;
         return (
             <div className='ui container'>
                 <div className='ui segment'>
@@ -43,8 +44,7 @@ class EmployeeShow extends Component {
                         <li className='item'> DOB: {this.props.employee.DOB}</li>
                         <li className='item'> Sick Days Left: {this.props.employee.sickDaysLeft}</li>
                         <li className='item'> Vacaction Days Left: {this.props.employee.vacationDaysLeft}</li>
-                        <li className='item'> Hourly Pay: {this.props.employee.hourlyPay.rate}</li>
-                        <li className='item'> Salary: {salary}</li>
+                        <li className='item'> {payType}: {pay}</li>
                         <li className='item'> Currently Working: {currentlyWorking}</li>
                     </ul>
                     <button 

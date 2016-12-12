@@ -10,8 +10,20 @@ var employeeSchema = new mongoose.Schema({
     DOB: Date,
     sickDaysLeft: String,
     vacationDaysLeft: Number,
-    hourlyPay: { applies: Boolean, rate: Number},
-    salary: { applies: Boolean, rate: Number},
+    hourlyPay: { 
+        applies: {
+            type: Boolean,
+            default: false
+                    }, 
+        rate: Number
+        },
+    salary: { 
+        applies: {
+            type: Boolean,
+            default: false
+                    }, 
+        monthlyRate: Number
+        },
     currentlyWorking: Boolean,
     comments: Array
 });

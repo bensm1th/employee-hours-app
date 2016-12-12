@@ -5,7 +5,6 @@ import { postEmployee, clearEmployeeErrorMessage } from '../actions/index';
 import { Link } from 'react-router';
 import AlertMessage from './alert_message';
 
-
 class EmployeeNew extends Component {
     constructor(props) {
         super(props);
@@ -51,8 +50,9 @@ class EmployeeNew extends Component {
                         <Field name="DOB" component={renderField} label="Date of Birth" type="text"/>
                         <Field name="sickDaysLeft" component={renderField}  label="Sick Days Left" type="text"/>
                         <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
-                        <Field name="salary" component={renderField} label="Salary" type='text' />
-                        <Field name="hourlyPay" component={renderField} label="Hourly Pay" type='text' />
+                        <Field name="pay" component={renderField} label="Pay" type='text' />
+                        <Field name='payType' component={renderRadio} label='Hourly' type='radio' value='hourlyPay'/>
+                        <Field name='payType' component={renderRadio} label='Salary' type='radio' value='salary'/>
                         {this.renderAlert()}
                         <button action='submit' className='ui green button'>Add Employee</button>
                         <Link to='/employee'>
@@ -78,6 +78,14 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
         {touched && error && <div className="error">{error}</div>}
     </div>
 );
+
+const renderRadio = ({ input, label, type, meta: { touched, error, warning } }) => {
+    return (
+    <div>
+        <label><input {...input} type={type} />{label}</label>
+        {touched && error && <div className="error">{error}</div>}
+    </div>)
+}
 
 
 const validate = (values) => {
@@ -110,6 +118,12 @@ const validate = (values) => {
     }
     if (!values.vacationDaysLeft) {
         errors.vacationDaysLeft = 'Please enter the number of vacation days left';
+    }
+    if (!values.pay) {
+        errors.pay = 'Please enter a pay amount';
+    }
+    if (!values.payType) {
+        errors.payType = 'Please choose a hourly or salary';
     }
     return errors;
 }

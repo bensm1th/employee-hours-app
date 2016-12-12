@@ -119,6 +119,12 @@ export function signupOwner({ email, password, secret }) {
 }
 
 export function postEmployee(form) {
+    if (form.payType === 'hourlyPay') {
+        form.hourlyPay = {applies: true, rate: form.pay};
+    }
+    if (form.payType === 'salary') {
+        form.salary = {applies: true, monthlyRate: form.pay};
+    }
     return function(dispatch) {
         axios.post(`${EMPLOYEE_URL}/new`, form, { headers: { authorization: localStorage.getItem('token') } }) 
             .then(response => {
