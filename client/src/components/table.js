@@ -129,7 +129,7 @@ class HoursTable extends Component {
     }
     renderSubmittedComments() {
         let commentArr;
-        if (this.props.comments) {
+        if (this.props.comments.length) {
         commentArr = this.props.comments.map(comment=> {
             if (comment.id){
             return (
@@ -164,7 +164,7 @@ class HoursTable extends Component {
         const salariedEmployees = this.props.salariedEmployees.map(employee=> {
             if (employee._id) {
                 return (
-                <tr>
+                <tr key={v4()}>
                     <td className='collapsing'> {`${employee.firstName}  ${employee.lastName}`} </td>
                     <td> {`${employee.salary.monthlyRate}`}</td>
                 </tr>)
@@ -180,6 +180,9 @@ class HoursTable extends Component {
         const dates = status === 200 ?  this.props.hours.data.dates: '';
         const start = status === 200 ? dates[0]: '';
         const end = status === 200 ? dates[dates.length - 1]: '';
+        console.log('================ this.props.comment ===================')
+        console.log(this.props.comments)
+        console.log(this.props.comments.length)
         return (
             <div className="ui container">
                 <div className='ui center aligned segment'>

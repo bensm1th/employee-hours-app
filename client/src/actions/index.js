@@ -309,10 +309,6 @@ export function addComment(comment, employee) {
             type: COMMENT_TEXT_INPUT,
             payload: ''
         });
-        dispatch({
-            type: COMMENT_ADD_EMPLOYEE,
-            payload: ''
-        })
     } 
 }
 

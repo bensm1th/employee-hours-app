@@ -45,15 +45,14 @@ const initialState = {
 }
 
 const deleteComment = (comment, action) => {
-    if (comment.id !== action.payload) {
-        return comment;
-    }
-    return {};
+    return comment.id !== action.payload;
 }
 export default function(state=initialState, action) {
+    console.log('============= state in reducer ====================')
+        console.log(state);
     switch(action.type) {
         case COMMENT_CLEAR:
-            return {...state, data: {...state.data, comments: [...state.data.comments.map(comment=> deleteComment(comment, action))]}};
+            return {...state, data: {...state.data, comments: [...state.data.comments.filter(comment=> deleteComment(comment, action))]}};
         case SAVE_TABLE:
             return Object.assign({}, state, action.payload);
         case POST_HOURS:
