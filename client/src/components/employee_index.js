@@ -58,8 +58,9 @@ class EmployeeIndex extends Component {
             let fullLastClock = "Employee has no timestamps";
             if (employee.timestamp) {
                 const lastClockType = employee.timestamp.logIn ? 'IN' : 'OUT';
-                const lastClockTime = moment(employee.timestamp.time).format('LLL');
-                fullLastClock = `${lastClockType}: ${lastClockTime}`;
+                const date = employee.timestamp.time.slice(5,10);
+                const time = employee.timestamp.time.slice(11,16);
+                fullLastClock = `${lastClockType}: on ${date} at ${time} `;
             }
             return (
                     <TableRow key={v4()}>
