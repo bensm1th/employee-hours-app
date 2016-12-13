@@ -128,7 +128,9 @@ class HoursTable extends Component {
         );
     }
     renderSubmittedComments() {
-        const commentArr = this.props.comments.map(comment=> {
+        let commentArr;
+        if (this.props.comments) {
+        commentArr = this.props.comments.map(comment=> {
             if (comment.id){
             return (
                 <tr id='misc' key={comment.id}>
@@ -142,7 +144,7 @@ class HoursTable extends Component {
                     </td>
                 </tr>
             )}
-        })
+        })}
         return commentArr;
     }
     
@@ -206,7 +208,7 @@ class HoursTable extends Component {
                 <table className="ui celled table">
                     <thead className='full-width'>
                         <tr>
-                        <th colspan={3}>Employee Name</th>
+                        <th colSpan={3}>Employee Name</th>
                         <th>Salary</th>
                         </tr>
                     </thead>
