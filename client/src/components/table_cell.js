@@ -38,7 +38,7 @@ class TableCell extends Component {
                     {this.props.vacation ? (
                         <div>
                             <br />
-                            {this.props.vacation} vacaction
+                            {this.props.vacation} vacation
                         </div>
                         ) : ''}
 

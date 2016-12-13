@@ -58,7 +58,7 @@ class EmployeeIndex extends Component {
             let fullLastClock = "Employee has no timestamps";
             if (employee.timestamp) {
                 const lastClockType = employee.timestamp.logIn ? 'IN' : 'OUT';
-                const lastClockTime = moment.tz(employee.timestamp.time, 'America/Los_Angeles').format('LLL');
+                const lastClockTime = moment.tz(employee.timestamp.time).format('LLL');
                 fullLastClock = `${lastClockType}: ${lastClockTime}`;
             }
             return (
