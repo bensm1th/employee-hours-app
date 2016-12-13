@@ -48,8 +48,6 @@ const deleteComment = (comment, action) => {
     return comment.id !== action.payload;
 }
 export default function(state=initialState, action) {
-    console.log('============= state in reducer ====================')
-        console.log(state);
     switch(action.type) {
         case COMMENT_CLEAR:
             return {...state, data: {...state.data, comments: [...state.data.comments.filter(comment=> deleteComment(comment, action))]}};

@@ -3,7 +3,18 @@ import  TableHeader  from './table_header';
 import { connect } from 'react-redux';
 import TableRow from './table_row';
 import TableCell from './table_cell';
-import { fetchTableData, cellClick, cellBlur, saveTable, deleteTable, fetchEmployees, addComment, onTextInput, addCommentEmployee, commentClear } from '../actions/index';
+import { 
+    fetchTableData, 
+    cellClick, 
+    cellBlur, 
+    saveTable, 
+    deleteTable, 
+    fetchEmployees, 
+    addComment, 
+    onTextInput, 
+    addCommentEmployee, 
+    commentClear 
+    } from '../actions/index';
 import { v4 } from 'node-uuid';
 import { Link } from 'react-router';
 import InputSelect from './table_input_select';
@@ -180,51 +191,58 @@ class HoursTable extends Component {
         const dates = status === 200 ?  this.props.hours.data.dates: '';
         const start = status === 200 ? dates[0]: '';
         const end = status === 200 ? dates[dates.length - 1]: '';
-        console.log('================ this.props.comment ===================')
-        console.log(this.props.comments)
-        console.log(this.props.comments.length)
         return (
             <div className="ui container">
-                <div className='ui center aligned segment'>
-                    <h1>
-                    HOURLY EMPLOYEES INFO FOR DATES: {start}-{end}
-                    </h1>
+                <div className='ui segments'>
+                    <div className='ui center aligned green inverted segment'>
+                        <h1>
+                        HOURLY EMPLOYEES INFO FOR DATES: {start}-{end}
+                        </h1>
+                    </div>
+                    <div className='ui segment'>
+                        <table className="ui celled table">
+                            <thead className='full-width'>
+                                <tr>
+                                <th>Employee Name</th>
+                                {headers}
+                                <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {employeeData}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className='ui center aligned secondary segment'>
+                        <p> Double-click on any cell to add vacation, sick, absent, or holiday time </p>
+                    </div>
                 </div>
-                <table className="ui celled table">
-                    <thead className='full-width'>
-                        <tr>
-                        <th>Employee Name</th>
-                        {headers}
-                        <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {employeeData}
-                    </tbody>
-                </table>
-                <div className='ui center aligned segment'>
-                    <p> Double-click on any cell to add vacation, sick, absent, or holiday time </p>
+                <div className='ui segments'>
+                    <div className='ui center aligned green inverted segment'>
+                        <h1> SALARIED EMPLOYEES </h1>
+                    </div>
+                    <div className='ui segment'>
+                    <table className="ui celled table">
+                        <thead className='full-width'>
+                            <tr>
+                            <th>Employee Name</th>
+                            <th>Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderSalariedEmployees()}
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
-                <div className='ui center aligned segment'>
-                    <h1> SALARIED EMPLOYEES </h1>
-                </div>
-                <table className="ui celled table">
-                    <thead className='full-width'>
-                        <tr>
-                        <th colSpan={3}>Employee Name</th>
-                        <th>Salary</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderSalariedEmployees()}
-                    </tbody>
-                </table>
-                <div className='ui center aligned segment'>
-                    <h1> ADD MISCELLANEOUS ITEMS </h1>
-                </div>
-                <div className='ui segment'>
-                    {this.renderComments()}
-                </div>
+                <div className='ui segments'>
+                    <div className='ui center aligned green inverted segment'>
+                        <h1> ADD MISCELLANEOUS ITEMS </h1>
+                    </div>
+                    <div className='ui segment'>
+                        {this.renderComments()}
+                    </div>
+                    </div>
                 <button 
                     className="ui green button"
                     onClick={()=> this.props.saveTable(hours)}

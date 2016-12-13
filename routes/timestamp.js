@@ -25,12 +25,8 @@ router.post('/timestamp', function(req, res) {
             //const exactTime = moment.utc(req.body.time).format("DD MMM YYYY hh:mm a");
             const exactTime = req.body.timeOfDay;
             const localTimePST = moment.tz(req.body.time, 'America/Los_Angeles').format("YYYY-MM-DD HH:mm:ss");;
-            console.log('================ localTimePST ================')
-            console.log(localTimePST);
             logState.time = exactTime;
             Timestamp.create({ time: localTimePST, employee: foundEmployee[0]._id }, function(err, newlyCreatedTimestamp) {
-                console.log('===============newlyCreatedTimestamp===============');
-                console.log(newlyCreatedTimestamp.time);
                 if (err) console.log(err);
                 else {
                     
@@ -70,6 +66,7 @@ router.post('/timestamp', function(req, res) {
                         }
                     }
                     newlyCreatedTimestamp.save();
+                    foundEmployee[0].timestamp = newlyCreatedTimestamp;
                     foundEmployee[0].save();
                     logState.show = true;
                     res.send({employee: foundEmployee[0], timestamp: newlyCreatedTimestamp, logState: logState});

@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import TableHeader  from './table_header';
 import TableRow from './table_row';
 import { v4 } from 'node-uuid';
+const moment = require('moment-timezone');
 
 //put the cells as children of the TableRow, but I need a new cell
 //cells start and end with <td>
@@ -54,6 +55,12 @@ class EmployeeIndex extends Component {
     renderEmployees() {
         return this.props.employees.map(employee => {
             const name = employee.firstName + " " + employee.lastName; 
+            let fullLastClock = "Employee has no timestamps";
+            if (employee.timestamp) {
+                const lastClockType = employee.timestamp.logIn ? 'IN' : 'OUT';
+                const lastClockTime = moment.tz(employee.timestamp.time, 'America/Los_Angeles').format('LLL');
+                fullLastClock = `${lastClockType}: ${lastClockTime}`;
+            }
             return (
                     <TableRow key={v4()}>
                         <td>{employee.currentlyWorking ? (<i className="green circle icon"></i>): (<i className="red circle thin icon"></i>)}</td>
@@ -73,18 +80,18 @@ class EmployeeIndex extends Component {
                             </Link>
                         </td>
                         <td>{employee.employeeNumber}</td>
-                        <td>random alert</td>
+                        <td>{fullLastClock}</td>
                     </TableRow>
                 )
         });
     }
 
     render() {  
-        const headers = ["Currently Working", "Name", "Employee Number", "Alerts"];
+        const headers = ["Currently Working", "Name", "Employee Number", "Last Clock In/Out"];
         const employeeData = this.props.employees.length ? this.renderEmployees() : <tr><td><div> employee name! </div></td></tr>;
         return (
             <div className="ui container">
-                <div className='ui segment'>
+                <div className='ui center aligned segment'>
                     <h1> CURRENT EMPLOYEES </h1>
                 </div>
                 <table className="ui celled table">

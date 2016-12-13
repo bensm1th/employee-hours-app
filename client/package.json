@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.15.2",
+    "moment-timezone": "^0.5.10",
     "node-uuid": "^1.4.7",
     "promise": "^7.1.1",
     "react": "^15.4.1",

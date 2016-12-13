@@ -24,16 +24,31 @@ class Footer extends Component {
                         <div className="three wide column">
                         <h4 className="ui inverted header">Technologies Used</h4>
                         <div className="ui inverted link list">
-                            <a href="https://facebook.github.io/react/" className="item">React.js</a>
-                            <a href='http://redux.js.org/' className='item'>Redux</a>
-                            <a href="https://nodejs.org/en/" className="item">Node.js</a>
-                            <a href="https://www.mongodb.com/" className="item">MongoDB</a>
-                            <a href="http://expressjs.com/" className="item">Express</a>
+                            <a href="https://facebook.github.io/react/" className="item">
+                                <img id="logo" src="https://facebook.github.io/react/favicon.ico"/>
+                                React.js
+                            </a>
+                            <a href='http://redux.js.org/' className='item'>
+                                <img id="logo" src="http://redux.js.org/gitbook/images/favicon.ico"/>
+                                Redux
+                            </a>
+                            <a href="https://nodejs.org/en/" className="item">
+                                <img id="logo" src="https://nodejs.org/static/favicon.png"/>
+                                Node.js
+                            </a>
+                            <a href="https://www.mongodb.com/" className="item">
+                                <img id="logo" src="https://www.mongodb.com/assets/images/global/favicon.ico"/>
+                                MongoDB
+                            </a>
+                            <a href="http://expressjs.com/" className="item">
+                                <img id="logo" src="http://expressjs.com/images/favicon.png"/>
+                                Express
+                            </a>
                         </div>
                         </div>
                         <div className="seven wide column">
                         <h4 className="ui inverted header">TLC Info-Tracking</h4>
-                        <p>The current version track employee information.  The next version will also track student information.</p>
+                        <p>The current version tracks employee information.  The next version will also track student information.</p>
                         </div>
                     </div>    
                 </div>

@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchEmployee, clearEmployee } from '../actions/index';
 import { Link } from 'react-router';
+const moment = require('moment-timezone');
+
 
 class EmployeeShow extends Component {
 
@@ -29,6 +31,7 @@ class EmployeeShow extends Component {
         const currentlyWorking = this.props.employee.currentlyWorking ? "yes" : "no";
         const payType = this.props.employee.hourlyPay.applies ? 'Hourly Pay' : 'Salary';
         const pay = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : this.props.employee.salary.monthlyRate;
+        const DOB = moment(this.props.employee.DOB).format('LL');
         return (
             <div className='ui container'>
                 <div className='ui segment'>
@@ -41,7 +44,7 @@ class EmployeeShow extends Component {
                         <li className='item'> Employee number: {this.props.employee.employeeNumber}</li>
                         <li className='item'> Address: {this.props.employee.address}</li>
                         <li className='item'> Phone: {this.props.employee.phone}</li>
-                        <li className='item'> DOB: {this.props.employee.DOB}</li>
+                        <li className='item'> DOB: {DOB}</li>
                         <li className='item'> Sick Days Left: {this.props.employee.sickDaysLeft}</li>
                         <li className='item'> Vacaction Days Left: {this.props.employee.vacationDaysLeft}</li>
                         <li className='item'> {payType}: {pay}</li>

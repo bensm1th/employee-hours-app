@@ -25,7 +25,8 @@ var employeeSchema = new mongoose.Schema({
         monthlyRate: Number
         },
     currentlyWorking: Boolean,
-    comments: Array
+    comments: Array,
+    timestamp: Object,
 });
 
 module.exports = mongoose.model('Employee', employeeSchema);

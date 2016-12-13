@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchEmployee, updateEmployee, deleteEmployee, clearEmployee } from '../actions/index';
 import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
+const moment = require('moment-timezone');
 
 class EmployeeEdit extends Component {
     constructor(props) {
@@ -21,13 +22,15 @@ class EmployeeEdit extends Component {
     handleInitialize() {
         const payAmount = this.props.employee.hourlyPay.applies ? this.props.employee.hourlyPay.rate : this.props.employee.salary.monthlyRate;
         const payType = this.props.employee.hourlyPay.applies ? 'hourly' : 'salary';
+        const DOB = moment(this.props.employee.DOB).format('LL');
+
         const initData = {
             'firstName': this.props.employee.firstName,
             'lastName': this.props.employee.lastName,
             'employeeNumber': this.props.employee.employeeNumber,
             'address': this.props.employee.address,
             'phone': this.props.employee.phone,
-            'DOB': this.props.employee.DOB,
+            'DOB': DOB,
             'sickDaysLeft': this.props.employee.sickDaysLeft,
             'vacationDaysLeft': this.props.employee.vacationDaysLeft,
             [payType]: payAmount,
