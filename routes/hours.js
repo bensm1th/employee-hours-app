@@ -28,23 +28,32 @@ router.post(`${rootURL}`, requireAuth, function(req, res) {
         if (err) {
             console.log(err);
         } else {
+            const salariedEmployees =employees.filter(employee=> {
+                return employee.salary.applies;
+            })
+            const filteredEmployees = employees.filter(employee=> {
+                return employee.hourlyPay.applies;
+            });
+            console.log('-=-=-=-=-=-=-= filtered employees -=-=-=-=-=-=-=')
+            console.log(filteredEmployees);
             var data = [];
             var count = 0;
-            employees.forEach((employee, i) => {
-                Timestamp.find({'employee': employee._id}, function(err, timestamps) {
+            filteredEmployees.forEach((filteredEmployee, i) => {
+               
+                Timestamp.find({'employee': filteredEmployee._id}, function(err, timestamps) {
                     if (err) {
                         console.log(err);
                         res.send({status: "error"})
                     } else {
                         //sort out all the timestamps for this employee
                         var sorted = sortDates(timestamps);
-                        var hours = createPeriods(req.body.beginning, req.body.end, sorted, employee._id, employee);
+                        var hours = createPeriods(req.body.beginning, req.body.end, sorted, filteredEmployee._id, filteredEmployee);
                         data.push({hours: hours});
                         count++;
-                        if (count == employees.length) {
+                        if (count == filteredEmployees.length) {
                             var numberOfDays = getNumberOfDays(req.body.beginning, req.body.end);
                             var allDays = arrayOfDates(req.body.beginning, numberOfDays);
-                            const tableData = {dates: allDays, data: data, status: 'success'};
+                            const tableData = {salariedEmployees: salariedEmployees, dates: allDays, data: data, status: 'success'};
                             Table.create(tableData, function(err, table) {
                                 if (err) {
                                     console.log(err);
@@ -55,6 +64,7 @@ router.post(`${rootURL}`, requireAuth, function(req, res) {
                         }
                     }
                 });
+         
             });
         }
     });

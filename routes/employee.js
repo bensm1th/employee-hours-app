@@ -78,8 +78,18 @@ router.get('/tlcemployee/:id/edit', requireAuth, function(req, res) {
 
 //UPDATE
 router.put('/tlcemployee/:id', requireAuth, function(req, res) {
-
-    Employee.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, employee) {
+    console.log('================ req.body =================')
+    console.log(req.body)
+    const updatedEmployee = req.body;
+    if(updatedEmployee.hourly) {
+        updatedEmployee.hourlyPay = {applies: true, rate: updatedEmployee.hourly}
+    }
+    if(updatedEmployee.salary) {
+        updatedEmployee.salary = {applies: true, monthlyRate: updatedEmployee.salary}
+    }
+    console.log('================ updatedEmployee =================')
+    console.log(updatedEmployee)
+    Employee.findByIdAndUpdate(req.params.id, updatedEmployee, {new: true}, function(err, employee) {
         if (err) {
             res.send('there was an error');
         } else {

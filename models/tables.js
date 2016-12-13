@@ -4,7 +4,7 @@ var tableSchema = new mongoose.Schema({
     dates: Array,
     data: Array,
     comments: Array,
-    salariedEmployee: Array
+    salariedEmployees: Array
 });
 
 module.exports = mongoose.model('Table', tableSchema);

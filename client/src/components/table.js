@@ -158,6 +158,19 @@ class HoursTable extends Component {
         this.props.addCommentEmployee(value);
     }
 
+    renderSalariedEmployees() {
+        const salariedEmployees = this.props.salariedEmployees.map(employee=> {
+            if (employee._id) {
+                return (
+                <tr>
+                    <td className='collapsing'> {`${employee.firstName}  ${employee.lastName}`} </td>
+                    <td> {`${employee.salary.monthlyRate}`}</td>
+                </tr>)
+            }
+        });
+        return salariedEmployees;
+    }
+
     render() {
         const { hours, hours: { status } } = this.props;
         const employeeData = status === 200 ? this.renderEmployees(hours.data.data) : <tr><td><div> employee name! </div></td></tr>;
@@ -169,7 +182,7 @@ class HoursTable extends Component {
             <div className="ui container">
                 <div className='ui center aligned segment'>
                     <h1>
-                    ALL EMPLOYEE HOURS FOR DATES: {start}-{end}
+                    HOURLY EMPLOYEES INFO FOR DATES: {start}-{end}
                     </h1>
                 </div>
                 <table className="ui celled table">
@@ -187,7 +200,26 @@ class HoursTable extends Component {
                 <div className='ui center aligned segment'>
                     <p> Double-click on any cell to add vacation, sick, absent, or holiday time </p>
                 </div>
-                
+                <div className='ui center aligned segment'>
+                    <h1> SALARIED EMPLOYEES </h1>
+                </div>
+                <table className="ui celled table">
+                    <thead className='full-width'>
+                        <tr>
+                        <th colspan={3}>Employee Name</th>
+                        <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.renderSalariedEmployees()}
+                    </tbody>
+                </table>
+                <div className='ui center aligned segment'>
+                    <h1> ADD MISCELLANEOUS ITEMS </h1>
+                </div>
+                <div className='ui segment'>
+                    {this.renderComments()}
+                </div>
                 <button 
                     className="ui green button"
                     onClick={()=> this.props.saveTable(hours)}
@@ -198,13 +230,7 @@ class HoursTable extends Component {
                 <button
                     className='ui red button'
                     onClick={()=>this.handleDelete()}
-                 >Delete</button>
-                 <div className='ui center aligned segment'>
-                    <h1> ADD MISCELLANEOUS ITEMS </h1>
-                 </div>
-                <div className='ui segment'>
-                    {this.renderComments()}
-                </div>
+                >Delete</button>
             </div>
         )
     }
@@ -217,7 +243,8 @@ const mapStateToProps = (state) => {
         comment: state.comment.comment,
         employee: state.comment.employee,
         state: state,
-        comments: state.hours.data.comments
+        comments: state.hours.data.comments,
+        salariedEmployees: state.hours.data.salariedEmployees
     }
 }
 

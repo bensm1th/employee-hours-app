@@ -25,6 +25,7 @@ class Footer extends Component {
                         <h4 className="ui inverted header">Technologies Used</h4>
                         <div className="ui inverted link list">
                             <a href="https://facebook.github.io/react/" className="item">React.js</a>
+                            <a href='http://redux.js.org/' className='item'>Redux</a>
                             <a href="https://nodejs.org/en/" className="item">Node.js</a>
                             <a href="https://www.mongodb.com/" className="item">MongoDB</a>
                             <a href="http://expressjs.com/" className="item">Express</a>

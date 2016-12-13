@@ -41,7 +41,7 @@ const change = (state={}, action) => {
 }
 
 const initialState = {
-    data: {comments: [], data: [], dates: [], salariedEmployee: []}
+    data: {comments: [], data: [], dates: [], salariedEmployees: []}
 }
 
 const deleteComment = (comment, action) => {
