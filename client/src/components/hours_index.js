@@ -25,13 +25,13 @@ class HoursIndex extends Component {
         return (
             <div className="ui container">
                 <div className='ui center aligned segment'>
-                    <h1> CURRENT TABLES </h1>
+                    <h1> CURRENT PAYROLL PERIODS </h1>
                 </div>
                 <div className='ui center aligned  segment'>
                     <ul className='ui list'>
                         {tables}
                     </ul>
-                    <Link to='/hours'><button className="ui green button">create table</button></Link>
+                    <Link to='/hours'><button className="ui green button">process new payroll period</button></Link>
                     <Link to='/'><button className="ui orange button">back</button></Link>
                  </div>
             </div>

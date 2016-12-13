@@ -13,7 +13,7 @@ class Header extends Component {
                         TLC INFO-MANAGEMENT
                     </Menu.Item>
                     <Menu.Item active={path.pathname === '/hours/index'} onClick={()=> browserHistory.push('/hours/index')}>
-                        TABLES
+                        PAYROLL
                     </Menu.Item>
                     <Menu.Item active={path.pathname === '/timestamp'} onClick={()=> browserHistory.push('/timestamp')}>
                         CLOCK

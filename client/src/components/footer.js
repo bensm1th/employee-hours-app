@@ -24,23 +24,23 @@ class Footer extends Component {
                         <div className="three wide column">
                         <h4 className="ui inverted header">Technologies Used</h4>
                         <div className="ui inverted link list">
-                            <a href="https://facebook.github.io/react/" className="item">
+                            <a href="https://facebook.github.io/react/" target="_blank" className="item">
                                 <img id="logo" src="https://facebook.github.io/react/favicon.ico"/>
                                 React.js
                             </a>
-                            <a href='http://redux.js.org/' className='item'>
+                            <a href='http://redux.js.org/' className='item' target="_blank">
                                 <img id="logo" src="http://redux.js.org/gitbook/images/favicon.ico"/>
                                 Redux
                             </a>
-                            <a href="https://nodejs.org/en/" className="item">
+                            <a href="https://nodejs.org/en/" className="item" target="_blank">
                                 <img id="logo" src="https://nodejs.org/static/favicon.png"/>
                                 Node.js
                             </a>
-                            <a href="https://www.mongodb.com/" className="item">
+                            <a href="https://www.mongodb.com/" className="item" target="_blank">
                                 <img id="logo" src="https://www.mongodb.com/assets/images/global/favicon.ico"/>
                                 MongoDB
                             </a>
-                            <a href="http://expressjs.com/" className="item">
+                            <a href="http://expressjs.com/" className="item" target="_blank">
                                 <img id="logo" src="http://expressjs.com/images/favicon.png"/>
                                 Express
                             </a>
