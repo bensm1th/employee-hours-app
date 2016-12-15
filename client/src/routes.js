@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import DisplayDates from './components/display_dates';
-import HoursTable from './components/table';
-import EmployeeIndex from './components/employee_index';
+import HoursTable from './components/table/table';
+import EmployeeIndex from './components/employee/employee_index';
 import IndexView from './components/index_view';
 import App from './components/app';
-import EmployeeShow from './components/employee_show';
-import EmployeeNew from './components/employee_new';
-import EmployeeEdit from './components/employee_edit';
+import EmployeeShow from './components/employee/employee_show';
+import EmployeeNew from './components/employee/employee_new';
+import EmployeeEdit from './components/employee/employee_edit';
 import TimestampNew from './components/timestamp_new';
 import HoursIndex from './components/hours_index';
 import Signout from './components/auth/signout/signout';
@@ -21,7 +21,7 @@ import SigninOwner from './components/auth/owner/signin';
 import SignupOwner from './components/auth/owner/signup';
 import SignoutOwner from './components/auth/owner/signout';
 import OwnerIndex from './components/auth/owner/index';
-import Owner from './components/owner';
+import Owner from './components/owner/owner';
 
 export default (
     <Route path='/' component={App} >

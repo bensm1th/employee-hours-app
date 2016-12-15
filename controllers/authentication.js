@@ -17,8 +17,11 @@ exports.ownerSignin = function(req, res, next) {
 }
 
 exports.signup = function(req, res, next) {
-    const email = req.body.email;
-    const password = req.body.password;
+    console.log('============== req.body ===============');
+    console.log(req.body);
+    const { email, password, firstName, lastName, 
+        employeeNumber, address, phone, DOB, sickDaysLeft, 
+        vacationDaysLeft, hourlyPay, salary} = req.body;
     if (!email || !password) {
         return res.status(422).send({ error: 'You must provide email and password'});
     }
@@ -31,10 +34,10 @@ exports.signup = function(req, res, next) {
             return res.status(422).send(error);
         }
          // if a user with email does not exist, create and save user record
-        const user = new User({
-            email,
-            password
-        });
+        const user = new User({ 
+            email, password, firstName, lastName, 
+            employeeNumber, address, phone, DOB, sickDaysLeft, 
+            vacationDaysLeft, hourlyPay, salary});
 
         user.save(function(err) {
             if(err) {return next(err)};

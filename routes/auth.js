@@ -17,8 +17,5 @@ router.post('/signup', requireOwner, Authentication.signup);
 router.post('/signin', requireSignin, Authentication.signin);
 router.post('/tlcowner/signin', requireOwnerSignin, Authentication.ownerSignin);
 router.post('/tlcowner/signup', Authentication.ownerSignup)
-router.get('/tlcowner', requireOwner, function(req, res) {
-    res.send({ message: 'OWNER MANAGEMENT TOOLS' });
-})
 
 module.exports = router;

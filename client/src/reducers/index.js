@@ -10,7 +10,7 @@ import AuthReducer from './reducer_auth';
 import OwnerReducer from './reducer_auth_owner';
 import { reducer as formReducer } from 'redux-form';
 import EmployeeReducer from './reducer_employee';
-
+import OwnerTools from './reducer_owner_tools';
 
 
 const rootReducer = combineReducers({
@@ -24,7 +24,8 @@ const rootReducer = combineReducers({
   dates: DatesReducer,
   auth: AuthReducer,
   owner: OwnerReducer,
-  comment: CommentInputReducer
+  comment: CommentInputReducer,
+  ownerTools: OwnerTools
 });
 
 export default rootReducer;

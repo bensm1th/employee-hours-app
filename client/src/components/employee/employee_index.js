@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../actions/index';
+import { fetchEmployees } from '../../actions/index';
 import { Link } from 'react-router';
-import TableHeader  from './table_header';
-import TableRow from './table_row';
+import TableHeader  from '../table/table_header';
+import TableRow from '../table/table_row';
 import { v4 } from 'node-uuid';
 const moment = require('moment-timezone');
 

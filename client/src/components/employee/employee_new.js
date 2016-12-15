@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { postEmployee, clearEmployeeErrorMessage } from '../actions/index';
+import { postEmployee, clearEmployeeErrorMessage } from '../../actions/index';
 import { Link } from 'react-router';
-import AlertMessage from './alert_message';
+import AlertMessage from '../alert_message';
 
 class EmployeeNew extends Component {
     constructor(props) {

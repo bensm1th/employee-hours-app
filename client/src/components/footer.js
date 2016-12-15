@@ -10,15 +10,15 @@ class Footer extends Component {
                         <h4 className="ui inverted header">By: Benjamin Smith</h4>
                         <div className="ui inverted link list">
                             <div className='item'>Email: whs.bsmith@gmail.com</div>
-                            <a href="http://www.bensmith.tech" className="item">Portfolio</a>
-                            <a href="https://github.com/bensm1th" className="item">Github</a>
-                            <a href="https://www.linkedin.com/in/benjamin-smith-a8386a57?trk=hp-identity-name" className="item">LinkedIn</a>
+                            <a href="http://www.bensmith.tech" target="_blank" className="item">Portfolio</a>
+                            <a href="https://github.com/bensm1th" target="_blank" className="item">Github</a>
+                            <a href="https://www.linkedin.com/in/benjamin-smith-a8386a57?trk=hp-identity-name" target="_blank" className="item">LinkedIn</a>
                         </div>
                         </div>
                         <div className="three wide column">
                         <h4 className="ui inverted header">For: TLC Learning Center</h4>
                         <div className="ui inverted link list">
-                            <a href="http://tlclearningcenter.org/" className="item">Main Website</a>
+                            <a href="http://tlclearningcenter.org/" target="_blank" className="item">Main Website</a>
                         </div>
                         </div>
                         <div className="three wide column">

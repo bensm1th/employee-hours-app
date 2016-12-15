@@ -14,7 +14,7 @@ import {
     onTextInput, 
     addCommentEmployee, 
     commentClear 
-    } from '../actions/index';
+    } from '../../actions/index';
 import { v4 } from 'node-uuid';
 import { Link } from 'react-router';
 import InputSelect from './table_input_select';

@@ -9,8 +9,10 @@ import {
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE, AUTH_OWNER, FETCH_OWNER_MESSAGE,
     UNAUTH_OWNER, POST_EMPLOYEE_ERROR, EMPLOYEE_ERR_CLEAR, COMMENT_ADD,
-    COMMENT_TEXT_INPUT, COMMENT_ADD_EMPLOYEE, COMMENT_CLEAR
+    COMMENT_TEXT_INPUT, COMMENT_ADD_EMPLOYEE, COMMENT_CLEAR, MANAGERS_FETCH,
+    MANAGER_FILTER_CHANGE, ACTIVE_MANAGER_POST, MANAGER_UPDATE
  } from './types';
+import filter_types from '../components/owner/filter_types';
 const ROOT_URL = '/tlchours';
 const EMPLOYEE_URL = '/tlcemployee';
 const TIMESTAMP_URL = '/timestamp';
@@ -39,21 +41,6 @@ export function fetchMessage() {
     }
 }
 
-export function fetchOwnerMessage() {
-    return function(dispatch) {
-        axios.get(`${OWNER_URL}`, {
-            headers: {
-                authorization: localStorage.getItem('ownerToken')
-            }
-        }). 
-            then(response=> {
-                dispatch({
-                    type: FETCH_OWNER_MESSAGE,
-                    payload: response.data.message
-                })
-            })
-    }
-}
 export function clearAuthErrorMessage() {
     return {
         type: CLEAR_ERROR
@@ -166,13 +153,72 @@ export function signinUser({ email, password }) {
     }
 }
 
-export function signupUser({ email, password, secret }) {
+export function signupUser(formProps) {
+    if (formProps.payType === 'hourlyPay') {
+        formProps.hourlyPay = {applies: true, rate: formProps.pay};
+        formProps.salary = {applies: false, monthlyRate: 0};
+    }
+    if (formProps.payType === 'salary') {
+        formProps.salary = {applies: true, monthlyRate: formProps.pay};
+        formProps.hourlyPay = {applies: false, rate: 0};
+    }
     return function(dispatch) {
         const options = { headers: { authorization: localStorage.getItem('ownerToken') } };
-        axios.post(`${AUTH_URL}/signup`, { email, password, secret }, options) 
+        axios.post(`${AUTH_URL}/signup`, formProps, options) 
             .then(response => {
                 browserHistory.push('/owner');
             }) 
+    }
+}
+
+export function changeManagerFilter(filter, manager) {
+    return function(dispatch) {
+        if (manager) {
+            dispatch({
+                type: ACTIVE_MANAGER_POST,
+                payload: manager
+            });
+        }
+        dispatch({
+            type: MANAGER_FILTER_CHANGE,
+            payload: filter
+        });
+    }
+    
+}
+export function updateManager(formProps, id) {
+    return function(dispatch) {
+        const options = { headers: { authorization: localStorage.getItem('ownerToken') } };
+        axios.put(`${OWNER_URL}/${id}`, formProps, options)
+            .then(result=> {
+                dispatch({
+                    type: MANAGER_UPDATE,
+                    payload: result.data.manager
+                });
+                dispatch({
+                    type: MANAGER_FILTER_CHANGE,
+                    payload: filter_types.show
+                });
+                dispatch(fetchManagers());
+            })
+            .catch(result=>{
+                
+                }
+            )
+    }
+}
+
+export function deleteManager(id) {
+    return function(dispatch) {
+    const options = { headers: { authorization: localStorage.getItem('ownerToken') } };
+    axios.delete(`${OWNER_URL}/${id}`, options)
+        .then(result=> {
+            dispatch({
+                type: MANAGER_FILTER_CHANGE,
+                payload: filter_types.table
+            });
+            dispatch(fetchManagers());
+        });
     }
 }
 
@@ -277,6 +323,17 @@ export function fetchEmployees() {
     const request = axios.get(EMPLOYEE_URL, { headers: { authorization: localStorage.getItem('token') } } );
     return {
         type: EMPLOYEES_FETCH,
+        payload: request
+    }
+}
+
+export function fetchManagers() {
+    const options = { headers: { authorization: localStorage.getItem('ownerToken') } };
+    const request = axios.get(OWNER_URL, options);
+    console.log('=====================request results of featchManagers ==========================================')
+    console.log(request);
+    return {
+        type: MANAGERS_FETCH,
         payload: request
     }
 }

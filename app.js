@@ -9,8 +9,10 @@ var express         = require('express'),
     //add routes
     timestampRoute  = require('./routes/timestamp'),
     employeeRoute   = require('./routes/employee'),
-    hoursRoute      = require('./routes/hours');
+    hoursRoute      = require('./routes/hours'),
+    managerRoute    = require('./routes/manager'),
     authRoute       = require('./routes/auth');
+
 
 
 mongoose.connect(process.env.TLC_DB);
@@ -25,6 +27,7 @@ app.use(employeeRoute);
 app.use(timestampRoute);
 app.use(hoursRoute);
 app.use(authRoute);
+app.use(managerRoute);
 
 if (process.env.NODE_ENV === 'production') {
     app.get('*', function (req, res) {        

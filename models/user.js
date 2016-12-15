@@ -19,7 +19,29 @@ const userSchema = new Schema({
         type: String,
         enum: ['Manager', 'Owner'],
         default: 'Manager'
-    }
+    },
+    firstName: String,
+    lastName: String,
+    employeeNumber: Number,
+    address: String,
+    phone: String,
+    DOB: Date,
+    sickDaysLeft: Number,
+    vacationDaysLeft: Number,
+    hourlyPay: { 
+        applies: {
+            type: Boolean,
+            default: false
+                    }, 
+        rate: Number
+        },
+    salary: { 
+        applies: {
+            type: Boolean,
+            default: false
+                    }, 
+        monthlyRate: Number
+        },
 });
     
 // on save hook, encrypt password

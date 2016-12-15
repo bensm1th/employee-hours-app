@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { postHours, setHoursValues, clearDates } from '../actions/index';
 import { Link } from 'react-router';
-import InputSelect from './table_input_select';
+import InputSelect from './table/table_input_select';
 
 class DisplayDates extends Component {
     constructor(props) {

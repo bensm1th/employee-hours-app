@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployee, updateEmployee, deleteEmployee, clearEmployee } from '../actions/index';
+import { fetchEmployee, updateEmployee, deleteEmployee, clearEmployee } from '../../actions/index';
 import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 const moment = require('moment-timezone');

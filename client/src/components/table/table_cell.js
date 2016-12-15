@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InputSelect from './table_input_select';
-import { updateHours } from '../actions/index.js'
+import { updateHours } from '../../actions/index.js'
 
 class TableCell extends Component {
 
