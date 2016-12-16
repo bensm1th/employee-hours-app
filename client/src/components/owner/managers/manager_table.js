@@ -32,7 +32,7 @@ const ManagerTable = (props) => {
         });
     }
     return (
-        <Table celled padded>
+        <Table celled selectable padded>
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>

@@ -5,7 +5,8 @@ var express             = require('express'),
     Hours               = require('../models/hours'),
     moment              = require('moment-timezone'),
     Employee            = require('../models/employees'),
-    Table               = require('../models/tables');
+    Table               = require('../models/tables'),
+    User                = require('../models/user'),
     Authentication      = require('../controllers/authentication'),
     passportService     = require('../services/passport'),
     passport            = require('passport'),
@@ -16,58 +17,72 @@ const requireAuth = passport.authenticate('manager_jwt', { session: false });
 
 //INDEX route
 router.get(`${rootURL}`, requireAuth, function(req, res) {
-    Table.find({}, function(err, tables) {
-        res.send({tables});
-    })
+    Table.find({})
+        .populate('approved.manager finalized.manager')
+        .exec(function(err, tables) {
+            const approvedTables = tables.filter(table=> {
+                return table.approved.status && !table.finalized.status;
+            });
+            const rawTables = tables.filter(table=> {
+                return !table.approved.status;
+            });
+            const finalizedTables = tables.filter(table=> {
+                return table.finalized.status;
+            });
+            res.send({tables: rawTables, approvedTables: approvedTables, finalizedTables: finalizedTables});
+        })
 });
 
 
 //CREATE route
 router.post(`${rootURL}`, requireAuth, function(req, res) {
-     Employee.find({}, function(err, employees) {
+    User.findById(req.body.id, function(err, tableCreator) {
         if (err) {
             console.log(err);
-        } else {
-            const salariedEmployees =employees.filter(employee=> {
-                return employee.salary.applies;
-            })
-            const filteredEmployees = employees.filter(employee=> {
-                return employee.hourlyPay.applies;
-            });
-            console.log('-=-=-=-=-=-=-= filtered employees -=-=-=-=-=-=-=')
-            console.log(filteredEmployees);
-            var data = [];
-            var count = 0;
-            filteredEmployees.forEach((filteredEmployee, i) => {
-               
-                Timestamp.find({'employee': filteredEmployee._id}, function(err, timestamps) {
-                    if (err) {
-                        console.log(err);
-                        res.send({status: "error"})
-                    } else {
-                        //sort out all the timestamps for this employee
-                        var sorted = sortDates(timestamps);
-                        var hours = createPeriods(req.body.beginning, req.body.end, sorted, filteredEmployee._id, filteredEmployee);
-                        data.push({hours: hours});
-                        count++;
-                        if (count == filteredEmployees.length) {
-                            var numberOfDays = getNumberOfDays(req.body.beginning, req.body.end);
-                            var allDays = arrayOfDates(req.body.beginning, numberOfDays);
-                            const tableData = {salariedEmployees: salariedEmployees, dates: allDays, data: data, status: 'success'};
-                            Table.create(tableData, function(err, table) {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    res.send(table)
-                                }
-                            });
-                        }
-                    }
-                });
-         
-            });
         }
-    });
+        Employee.find({}, function(err, employees) {
+            if (err) {
+                console.log(err);
+            } else {
+                const salariedEmployees =employees.filter(employee=> {
+                    return employee.salary.applies;
+                })
+                const filteredEmployees = employees.filter(employee=> {
+                    return employee.hourlyPay.applies;
+                });
+                var data = [];
+                var count = 0;
+                filteredEmployees.forEach((filteredEmployee, i) => {
+                
+                    Timestamp.find({'employee': filteredEmployee._id}, function(err, timestamps) {
+                        if (err) {
+                            console.log(err);
+                            res.send({status: "error"})
+                        } else {
+                            //sort out all the timestamps for this employee
+                            var sorted = sortDates(timestamps);
+                            var hours = createPeriods(req.body.beginning, req.body.end, sorted, filteredEmployee._id, filteredEmployee);
+                            data.push({hours: hours});
+                            count++;
+                            if (count == filteredEmployees.length) {
+                                var numberOfDays = getNumberOfDays(req.body.beginning, req.body.end);
+                                var allDays = arrayOfDates(req.body.beginning, numberOfDays);
+                                const tableData = {createdBy: tableCreator, salariedEmployees: salariedEmployees, dates: allDays, data: data, status: 'success'};
+                                Table.create(tableData, function(err, table) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.send(table)
+                                    }
+                                });
+                            }
+                        }
+                    });
+            
+                });
+            }
+        });
+    })
 });
 
 //SHOW route
@@ -79,11 +94,11 @@ router.get(`${rootURL}:id`, requireAuth, function(req, res) {
 
 //UPDATE route
 router.put(`${rootURL}:hours_id`, requireAuth, function(req, res) {
-    Table.findByIdAndUpdate(req.params.hours_id, req.body, function(err, table) {
+    Table.findByIdAndUpdate(req.params.hours_id, req.body).populate('approved.manager').exec(function(err, table) {
         if (err) {
             console.log(err) 
         } else {
-            res.send('you hit the hours UPDATE route');
+            res.send('Table successfully updated!');
         }
     });
 });
@@ -191,8 +206,6 @@ function createPeriods(beginning, end, timestamps, eid, employee) {
             var periodString = startTime + "-" + timestamp.time;
             //get the day the time started, and convert it to the local time in Los Angeles
             var periodDay = moment.tz(startTime, 'America/Los_Angeles').format('MM/DD');
-            console.log('------------- periodDay ----------------')
-            console.log(periodDay);
             if (allDates.hasOwnProperty(periodDay)) {
                 //add the hours worked to the all dates obj
                 allDates[periodDay] += periodLength;

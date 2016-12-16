@@ -4,13 +4,13 @@ import {
     AUTH_USER, UNAUTH_USER, DATE_CLEAR, 
     DATE_SET, TABLE_DELETE, EMPLOYEE_DELETE, TABLE_FETCH, 
     EMPLOYEE_POST, LOGSTATE_CLEAR, ID_CHANGE, TIMESTAMP_POST, 
-    EMPLOYEE_UPDATE, EMPLOYEES_POST, EMPLOYEE_FETCH, 
-    EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, 
+    EMPLOYEE_UPDATE, EMPLOYEES_POST, EMPLOYEE_FETCH, PAYROLL_MESSAGE,
+    EMPLOYEE_CLEAR, EMPLOYEES_FETCH, POST_HOURS, SAVE_TABLE, UN_ID_USER,
     GET_TABLE, CELL_BLUR, CELL_CLICKED, AUTH_ERROR, CLEAR_ERROR, 
     UPDATE_HOURS, FETCH_MESSAGE, AUTH_OWNER, FETCH_OWNER_MESSAGE,
     UNAUTH_OWNER, POST_EMPLOYEE_ERROR, EMPLOYEE_ERR_CLEAR, COMMENT_ADD,
     COMMENT_TEXT_INPUT, COMMENT_ADD_EMPLOYEE, COMMENT_CLEAR, MANAGERS_FETCH,
-    MANAGER_FILTER_CHANGE, ACTIVE_MANAGER_POST, MANAGER_UPDATE
+    MANAGER_FILTER_CHANGE, ACTIVE_MANAGER_POST, MANAGER_UPDATE, ID_USER
  } from './types';
 import filter_types from '../components/owner/filter_types';
 const ROOT_URL = '/tlchours';
@@ -26,6 +26,28 @@ export function clearEmployeeErrorMessage() {
     }
 }
 
+
+export function approvePayroll(hours, managerId) {
+    return function(dispatch) {
+        hours.data.approved = {manager: managerId, status: true};
+        const options = { headers: { authorization: localStorage.getItem('token') } };
+        axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options ) 
+            .then(response => {
+                dispatch({ type: SAVE_TABLE, payload: {hours} });
+                browserHistory.push('/hours/index');
+            }) 
+            .catch(response=> {
+                console.log(response);
+            });
+    }
+}
+
+export function clearPayrollMessage() {
+    return {
+        type: PAYROLL_MESSAGE,
+        payload: {message: '', show: false, success: false}
+    }           
+}
 
 export function fetchMessage() {
     return function(dispatch) {
@@ -46,12 +68,14 @@ export function clearAuthErrorMessage() {
         type: CLEAR_ERROR
     }
 }
-
+UN_ID_USER
 export function signoutOwner() {
-    localStorage.removeItem('ownerToken');
-
-    return {
-        type: UNAUTH_OWNER
+    return function(dispatch){
+        localStorage.removeItem('ownerToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('manager_id');
+        dispatch({ type: UNAUTH_OWNER });
+        dispatch({ type: UN_ID_USER });
     }
 }
 
@@ -59,8 +83,10 @@ export function signoutUser() {
     return function(dispatch) {
         localStorage.removeItem('token');
         localStorage.removeItem('ownerToken');
+        localStorage.removeItem('manager_id');
         dispatch({ type: UNAUTH_OWNER });
-        dispatch({ type: UNAUTH_USER })
+        dispatch({ type: UNAUTH_USER });
+        dispatch({ type: UN_ID_USER });
     }
 }
 
@@ -76,8 +102,9 @@ export function signinOwner({ email, password }) {
                 //-save the JWT token
                 //in local storage?
                 localStorage.setItem('ownerToken', response.data.ownerToken);
-                localStorage.setItem('token', response.data.ownerToken )
-
+                localStorage.setItem('token', response.data.ownerToken );
+                localStorage.setItem('manager_id', response.data.id);
+                dispatch( { type: ID_USER, payload: response.data.id });
                 //-redirect the user to the 'feature'
                 browserHistory.push('/owner');
             })
@@ -95,6 +122,8 @@ export function signupOwner({ email, password, secret }) {
         .then(response => {
             dispatch({ type: AUTH_OWNER });
             dispatch({ type: AUTH_USER });
+            localStorage.setItem('manager_id', response.data.id);
+            dispatch( { type: ID_USER, payload: response.data.id });
             localStorage.setItem('ownerToken', response.data.ownerToken);
             localStorage.setItem('token', response.data.ownerToken );
             browserHistory.push('/owner');
@@ -139,8 +168,10 @@ export function signinUser({ email, password }) {
                 //if request is good...
                 //-update state to indicate user authenticated
                 dispatch( { type: AUTH_USER });
+                dispatch( { type: ID_USER, payload: response.data.id });
                 //-save the JWT token
                 //in local storage?
+                localStorage.setItem('manager_id', response.data.id);
                 localStorage.setItem('token', response.data.token);
                 //-redirect the user to the 'feature'
                 browserHistory.push('/');
@@ -263,6 +294,8 @@ export function deleteEmployee(id) {
     }
 }
 
+
+
 export function fetchTables() {
     const options = { headers: { authorization: localStorage.getItem('token') } };
     const request = axios.get(`${ROOT_URL}`, options);
@@ -330,29 +363,40 @@ export function fetchEmployees() {
 export function fetchManagers() {
     const options = { headers: { authorization: localStorage.getItem('ownerToken') } };
     const request = axios.get(OWNER_URL, options);
-    console.log('=====================request results of featchManagers ==========================================')
-    console.log(request);
     return {
         type: MANAGERS_FETCH,
         payload: request
     }
 }
 
-export function postHours(beginning, end) {
+export function postHours(beginning, end, id) {
     const options = { headers: { authorization: localStorage.getItem('token') } };
-    const request = axios.post(ROOT_URL, {beginning, end}, options);
+    const request = axios.post(ROOT_URL, {beginning, end, id}, options);
     return {
         type: POST_HOURS,
         payload: request
     }
 }
 
+
 export function saveTable(hours) {
-    const options = { headers: { authorization: localStorage.getItem('token') } };
-    const request = axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options);
-    return {
-        type: SAVE_TABLE,
-        payload: {hours}
+    return function(dispatch) {
+        const options = { headers: { authorization: localStorage.getItem('token') } };
+        axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options)
+            .then(result=> {
+                dispatch({
+                    type: SAVE_TABLE,
+                    payload: {hours}
+                });
+                
+                dispatch({
+                    type: PAYROLL_MESSAGE,
+                    payload: {message: result.data, show: true, success: true}
+                });
+            })
+            .catch(response=> {
+                console.log(response);
+            });
     }
 }
 

@@ -1,4 +1,7 @@
-import { UPDATE_HOURS, CELL_BLUR, CELL_CLICKED, SAVE_TABLE, POST_HOURS, GET_TABLE, COMMENT_ADD, COMMENT_CLEAR } from '../actions/types';
+import { UPDATE_HOURS, CELL_BLUR, 
+    CELL_CLICKED, SAVE_TABLE, 
+    POST_HOURS, GET_TABLE, PAYROLL_MESSAGE,
+    COMMENT_ADD, COMMENT_CLEAR } from '../actions/types';
 
 const timeType = (payload) => {
     const totalTime = payload.update.hours + ":" + payload.update.mins;
@@ -41,7 +44,16 @@ const change = (state={}, action) => {
 }
 
 const initialState = {
-    data: {comments: [], data: [], dates: [], salariedEmployees: []}
+    data: {
+        comments: [], 
+        data: [], 
+        dates: [], 
+        salariedEmployees: [], 
+        createdBy: {}, 
+        approved:{}, 
+        finalized: {},
+    },
+    payrollMessage: { message: '', show: false, success: false}
 }
 
 const deleteComment = (comment, action) => {
@@ -49,6 +61,8 @@ const deleteComment = (comment, action) => {
 }
 export default function(state=initialState, action) {
     switch(action.type) {
+        case PAYROLL_MESSAGE:
+            return {...state, payrollMessage: action.payload}
         case COMMENT_CLEAR:
             return {...state, data: {...state.data, comments: [...state.data.comments.filter(comment=> deleteComment(comment, action))]}};
         case SAVE_TABLE:
@@ -56,7 +70,8 @@ export default function(state=initialState, action) {
         case POST_HOURS:
             return Object.assign({}, state, action.payload);
         case GET_TABLE:
-            return Object.assign({}, state, action.payload);
+            return Object.assign({}, state, action.payload)
+            //return {...state, data: action.payload.data};
         case COMMENT_ADD:       
             return {...state, data: {...state.data, comments: [...state.data.comments, action.payload]}};
         case UPDATE_HOURS:

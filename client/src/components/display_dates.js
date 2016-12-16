@@ -20,7 +20,7 @@ class DisplayDates extends Component {
     onFormSubmit(dates) {
         const beginning = `${dates.beginning.months}/${dates.beginning.days}/${dates.beginning.years}`;
         const end = `${dates.end.months}/${dates.end.days}/${dates.end.years}`;
-        this.props.postHours(beginning, end)
+        this.props.postHours(beginning, end, this.props.id)
             .then(()=> {
                 this.context.router.push('/hourstable/' + this.props.state.hours.data._id);
             });
@@ -125,7 +125,8 @@ class DisplayDates extends Component {
 const mapStateToProps = (state) => {
     return {
         state: state,
-        dates: state.dates
+        dates: state.dates,
+        id: state.auth.id
     }
 }
 

@@ -1,4 +1,4 @@
-import { AUTH_ERROR, AUTH_USER, UNAUTH_USER, CLEAR_ERROR, FETCH_MESSAGE } from '../actions/types';
+import { AUTH_ERROR, AUTH_USER, UNAUTH_USER, CLEAR_ERROR, FETCH_MESSAGE, ID_USER, UN_ID_USER } from '../actions/types';
 const initialState = {
     authenticated: false
 }
@@ -15,6 +15,10 @@ export default function(state = initialState, action) {
             return {...state, error: ''};
         case FETCH_MESSAGE:
             return {...state, message: action.payload};
+        case ID_USER:
+            return {...state, id: action.payload};
+        case UN_ID_USER:
+            return {...state, id: ''};
         default:
             return state;
     }

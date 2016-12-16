@@ -41,41 +41,45 @@ class Signup extends Component {
                 <div className='ui center aligned green inverted segment'>
                     <h1> ADD MANAGER ACCOUNT </h1>
                 </div>
-                    <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="ui form">
-                        <div className='ui segment'>
-                            <div className='ui secondary segment'>
-                                <h3> PERSONAL INFO</h3>
-                            </div>
-                            <Field name='firstName' type='text' component={renderField} label="First Name"/>
-                            <Field name='lastName' type='text' component={renderField} label="Last Name"/>
-                            <Field name="employeeNumber" component={renderField} label="Employee Number" type="text"/>
-                            <Field name="address" component={renderField} label="Address" type="text"/>
-                            <Field name="phone" component={renderField} label="Phone" type="text"/>
-                            <Field name="DOB" component={renderField} label="Date of Birth" type="text"/>
-                            <Field name="sickDaysLeft" component={renderField}  label="Sick Days Left" type="text"/>
-                            <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
-                            <Field name="pay" component={renderField} label="Pay" type='text' />
-                            <Field name='payType' component={renderRadio} label='Hourly' type='radio' value='hourlyPay'/>
-                            <Field name='payType' component={renderRadio} label='Salary' type='radio' value='salary'/>
-                        </div>
-                        <div className='ui segment'>
-                            <div className='ui secondary segment'>
-                                <h3> ACCOUNT INFO</h3>
-                            </div>
-                            <Field name='email' type='text' component={renderField} label="Email"/>
-                            <Field name='password' type='password' component={renderField} label="Password"/>
-                            <Field name='passwordConfirm' type='password' component={renderField} label="Confirm Password" />
-                            <Field name='secret' type='password' component={renderField} label="Enter Secret" />
-                            {this.renderAlert()}
-                        </div>
-                        <button action='submit' className='ui green button'>Create Manager Account</button>
-                        <button 
-                            type='button' 
-                            className='ui blue button'
-                            onClick={()=>this.props.changeManagerFilter(filter_types.table)}
-                        >Back</button>
-                    </form>
-            </div>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} className="ui form">
+                <div className='ui segments'>
+                    <div className='ui secondary segment'>
+                        <h3> PERSONAL INFO</h3>
+                    </div>
+                    <div className='ui segment'>
+                        <Field name='firstName' type='text' component={renderField} label="First Name"/>
+                        <Field name='lastName' type='text' component={renderField} label="Last Name"/>
+                        <Field name="employeeNumber" component={renderField} label="Employee Number" type="text"/>
+                        <Field name="address" component={renderField} label="Address" type="text"/>
+                        <Field name="phone" component={renderField} label="Phone" type="text"/>
+                        <Field name="DOB" component={renderField} label="Date of Birth" type="text"/>
+                        <Field name="sickDaysLeft" component={renderField}  label="Sick Days Left" type="text"/>
+                        <Field name="vacationDaysLeft" component={renderField}  label="Vacation Days Left" type="text"/>
+                        <Field name="pay" component={renderField} label="Pay" type='text' />
+                        <Field name='payType' component={renderRadio} label='Hourly' type='radio' value='hourlyPay'/>
+                        <Field name='payType' component={renderRadio} label='Salary' type='radio' value='salary'/>
+                    </div>
+                </div>
+                <div className='ui segments'>
+                    <div className='ui secondary segment'>
+                        <h3> ACCOUNT INFO</h3>
+                    </div>
+                    <div className='ui segment'>
+                        <Field name='email' type='text' component={renderField} label="Email"/>
+                        <Field name='password' type='password' component={renderField} label="Password"/>
+                        <Field name='passwordConfirm' type='password' component={renderField} label="Confirm Password" />
+                        <Field name='secret' type='password' component={renderField} label="Enter Secret" />
+                        {this.renderAlert()}
+                    </div>
+                </div>
+                    <button action='submit' className='ui green button'>Create Manager Account</button>
+                    <button 
+                        type='button' 
+                        className='ui blue button'
+                        onClick={()=>this.props.changeManagerFilter(filter_types.table)}
+                    >Back</button>
+                </form>
+        </div>
         )
     }
 }

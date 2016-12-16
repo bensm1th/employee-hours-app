@@ -9,11 +9,11 @@ function tokenForUser(user) {
 exports.signin = function(req, res, next) {
     // User has already had their email and password auth'ed, we just need to give them a token
     // we have access to the user through req.user.  Remember, this is just a callback function to the express route.
-    res.send({ token: tokenForUser(req.user) });
+    res.send({ token: tokenForUser(req.user), id: req.user._id });
 }
 
 exports.ownerSignin = function(req, res, next) {
-    res.send({ ownerToken: tokenForUser(req.user) });
+    res.send({ ownerToken: tokenForUser(req.user), id: req.user._id });
 }
 
 exports.signup = function(req, res, next) {

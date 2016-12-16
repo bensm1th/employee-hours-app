@@ -75,7 +75,7 @@ class ManagerEdit extends Component {
                             onClick={()=>this.props.deleteManager(this.props.active_manager._id)} 
                             className="ui red button"
                             type='button'
-                        >Delete Employee</button>
+                        >Delete Manager Account</button>
                     </form>
                 </div>
             </div>

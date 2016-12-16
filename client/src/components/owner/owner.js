@@ -1,11 +1,18 @@
 import React, { Component }  from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchManagers, changeManagerFilter, updateManager, deleteManager, signupUser, clearAuthErrorMessage } from '../../actions/index';
+import { fetchManagers, 
+        changeManagerFilter, 
+        updateManager, 
+        deleteManager, 
+        signupUser, 
+        clearAuthErrorMessage, 
+        fetchTables 
+    } from '../../actions/index';
 import { Link } from 'react-router';
 import { Grid, Menu, Segment } from 'semantic-ui-react'
 import Managers from './managers/managers';
-import Payroll from './payroll';
+import Payroll from './payroll/payroll';
 import Students from './students';
 
 class Owner extends Component {
@@ -14,9 +21,9 @@ class Owner extends Component {
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-
     componentWillMount() {
-        this.props.fetchManagers()
+        this.props.fetchManagers();
+        this.props.fetchTables();
     }
 
     renderOwnerTools() {
@@ -34,7 +41,7 @@ class Owner extends Component {
     }
 
     render() {
-        const { activeItem } = this.state
+        const { activeItem } = this.state;
         return (
             <div className='ui container'>
                 <div className='ui center aligned segment'> <h1> OWNER MANAGEMENT TOOLS </h1> </div>
@@ -46,17 +53,15 @@ class Owner extends Component {
                         <Menu.Item name='Students' active={activeItem === 'Students'} onClick={this.handleItemClick} />
                     </Menu>
                     </Grid.Column>
-
                     <Grid.Column stretched width={12}>
                     <Segment>
                         {this.renderOwnerTools()}
                     </Segment>
                     </Grid.Column>
                 </Grid>
-            
                 </div>
-        )
-    }
+            )
+        }
 }
 
 const mapStateToProps = (state) => {
@@ -70,4 +75,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { fetchManagers, changeManagerFilter, updateManager, deleteManager, signupUser, clearAuthErrorMessage })(Owner);
+export default connect(mapStateToProps, { fetchTables, fetchManagers, changeManagerFilter, updateManager, deleteManager, signupUser, clearAuthErrorMessage })(Owner);

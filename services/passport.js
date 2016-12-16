@@ -40,7 +40,6 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
     if (err) { return done(err, false); }
 
     if (user) {
-      console.log('token confirmed')
       done(null, user);
     } else {
       done(null, false);
@@ -64,7 +63,6 @@ const ownerLocalLogin = new LocalStrategy(localOptions, function(email, password
     user.comparePassword(password, function(err, isMatch) {
       if (err) { return done(err); }
       if (!isMatch) { return done(null, false); }
-      console.log('owner local login confirmed');
       return done(null, user);
     });
   });

@@ -13,12 +13,15 @@ import {
     addComment, 
     onTextInput, 
     addCommentEmployee, 
-    commentClear 
+    commentClear,
+    approvePayroll,
+    clearPayrollMessage
     } from '../../actions/index';
 import { v4 } from 'node-uuid';
 import { Link } from 'react-router';
 import InputSelect from './table_input_select';
-
+import AlertMessage from '../alert_message';
+const moment = require('moment-timezone');
 
 const renderHeaders = (datesArr) => {
     return datesArr.map(day=> {
@@ -34,6 +37,7 @@ class HoursTable extends Component {
         this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
         this.setValues = this.setValues.bind(this);
         this.handleCommentRemove = this.handleCommentRemove.bind(this); 
+        this.handleMessageClose = this.handleMessageClose.bind(this);
     }
 
     static contextTypes = {
@@ -184,8 +188,86 @@ class HoursTable extends Component {
         return salariedEmployees;
     }
 
+    renderAlert() {
+        if (this.props.payrollMessage.show) {
+            const success = this.props.payrollMessage.success;
+            return (
+                <AlertMessage
+                    success={success}
+                    errorMessage={''}
+                    handleMessageClose={this.handleMessageClose}
+                    successMessage={this.props.payrollMessage.message}
+                />
+            );
+        }
+    }
+
+    handleMessageClose() {
+        this.props.clearPayrollMessage();
+    }
+
+    renderButtons(hours, managerId) {
+        if (this.props.finalized) {
+            return (
+                <button 
+                    disabled
+                    className="ui right labeled icon button"
+                >
+                    <i className="check circle outline large icon"></i>
+                        Payroll is Finalized
+                </button>
+            )
+        } 
+        if (this.props.approved && !this.props.finalized) {
+            return (
+                <div>
+                    <button 
+                        className="ui green button"
+                        onClick={()=> this.props.saveTable(hours)}
+                    >Save Updates</button>
+                    <button
+                        className='ui red button'
+                        onClick={()=>this.handleDelete()}
+                    >Delete</button>
+                    <button 
+                        className="ui right labeled icon button"
+                        onClick={()=>this.props.approvePayroll(hours, managerId)}
+                    >
+                        <i className="check circle outline large icon"></i>
+                        Finalize Payroll
+                    </button>
+                </div>
+            )
+        } 
+        if (!this.props.approved) {
+            return (
+                <div>
+                    <button 
+                        className="ui green button"
+                        onClick={()=> this.props.saveTable(hours)}
+                    >Save Updates</button>
+                    <Link to={`/hours/index`}>
+                        <button className='ui orange button'>Back</button>
+                    </Link>
+                    <button
+                        className='ui red button'
+                        onClick={()=>this.handleDelete()}
+                    >Delete</button>
+                    <button 
+                        className="ui right labeled icon button"
+                        onClick={()=>this.props.approvePayroll(hours, managerId)}
+                    >
+                        <i className="check circle outline large icon"></i>
+                        Approve Payroll
+                    </button>
+                </div>
+            )
+        }
+    }
+
     render() {
-        const { hours, hours: { status } } = this.props;
+        processTable(this.props.hours);
+        const { managerId, hours, hours: { status } } = this.props;
         const employeeData = status === 200 ? this.renderEmployees(hours.data.data) : <tr><td><div> employee name! </div></td></tr>;
         const headers = status === 200 ? renderHeaders(hours.data.dates): <th>Date</th>;
         const dates = status === 200 ?  this.props.hours.data.dates: '';
@@ -196,8 +278,9 @@ class HoursTable extends Component {
                 <div className='ui segments'>
                     <div className='ui center aligned green inverted segment'>
                         <h1>
-                        HOURLY EMPLOYEES INFO FOR DATES: {start}-{end}
+                        HOURLY TIMES FOR : {start}-{end} 
                         </h1>
+                        -- created by : {`${this.props.createdBy.firstName} ${this.props.createdBy.lastName}`}
                     </div>
                     <div className='ui segment'>
                         <table className="ui celled table">
@@ -217,43 +300,40 @@ class HoursTable extends Component {
                         <p> Double-click on any cell to add vacation, sick, absent, or holiday time </p>
                     </div>
                 </div>
-                <div className='ui segments'>
-                    <div className='ui center aligned green inverted segment'>
-                        <h1> SALARIED EMPLOYEES </h1>
+                <div className='ui two column grid'>
+                    <div className='column'>
+                        <div className='ui segments'>
+                            <div className='ui center aligned green inverted horizontal segment'>
+                                <h1> SALARIED EMPLOYEES </h1>
+                            </div>
+                            <div className='ui horizontal segment'>
+                                <table className="ui celled table">
+                                    <thead className='full-width'>
+                                        <tr>
+                                        <th>Employee Name</th>
+                                        <th>Salary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.renderSalariedEmployees()}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {this.renderAlert()}
+                            {this.renderButtons(hours, managerId)}
                     </div>
-                    <div className='ui segment'>
-                    <table className="ui celled table">
-                        <thead className='full-width'>
-                            <tr>
-                            <th>Employee Name</th>
-                            <th>Salary</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.renderSalariedEmployees()}
-                        </tbody>
-                    </table>
+                        <div className='column'>
+                            <div className='ui segments'>
+                                <div className='ui center aligned green inverted horizontal segment'>
+                                    <h1> ADD MISCELLANEOUS ITEMS </h1>
+                                </div>
+                                <div className='ui horizontal segment'>
+                                    {this.renderComments(hours, managerId)}
+                                </div>
+                            </div>
                     </div>
                 </div>
-                <div className='ui segments'>
-                    <div className='ui center aligned green inverted segment'>
-                        <h1> ADD MISCELLANEOUS ITEMS </h1>
-                    </div>
-                    <div className='ui segment'>
-                        {this.renderComments()}
-                    </div>
-                    </div>
-                <button 
-                    className="ui green button"
-                    onClick={()=> this.props.saveTable(hours)}
-                >Save Updates</button>
-                <Link to={`/hours/index`}>
-                    <button className='ui orange button'>Back</button>
-                </Link>
-                <button
-                    className='ui red button'
-                    onClick={()=>this.handleDelete()}
-                >Delete</button>
             </div>
         )
     }
@@ -267,7 +347,13 @@ const mapStateToProps = (state) => {
         employee: state.comment.employee,
         state: state,
         comments: state.hours.data.comments,
-        salariedEmployees: state.hours.data.salariedEmployees
+        salariedEmployees: state.hours.data.salariedEmployees, 
+        createdBy: state.hours.data.createdBy,
+        tableId: state.hours.data._id,
+        managerId: state.auth.id,
+        payrollMessage: state.hours.payrollMessage,
+        approved: state.hours.data.approved.status,
+        finalized: state.hours.data.finalized.status
     }
 }
 
@@ -281,6 +367,26 @@ export default connect(mapStateToProps, {
     addComment, 
     onTextInput,
     addCommentEmployee,
-    commentClear
+    commentClear,
+    approvePayroll,
+    clearPayrollMessage
 })(HoursTable);
+
+function processTable(table) {
+    console.log('------------------ processing table data -----------------------');
+    const filteredTable = table.data.data.map(employee=> {
+        return employee.hours.tableArr.filter(cell=> {
+            return cell.date;
+        });
+    });
+    const absentTime = filteredTable.map(employee=> {
+        return employee.reduce(function(total, num) {
+            return total + num.absentTime;
+        }, 0)
+    });
+    console.log(filteredTable);
+    console.log('------------------ processing table data: ABSENT TIME -----------------------');
+    console.log(absentTime);
+}
+
 
