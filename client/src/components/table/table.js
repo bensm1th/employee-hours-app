@@ -266,7 +266,6 @@ class HoursTable extends Component {
     }
 
     render() {
-        processTable(this.props.hours);
         const { managerId, hours, hours: { status } } = this.props;
         const employeeData = status === 200 ? this.renderEmployees(hours.data.data) : <tr><td><div> employee name! </div></td></tr>;
         const headers = status === 200 ? renderHeaders(hours.data.dates): <th>Date</th>;
@@ -372,21 +371,21 @@ export default connect(mapStateToProps, {
     clearPayrollMessage
 })(HoursTable);
 
-function processTable(table) {
-    console.log('------------------ processing table data -----------------------');
-    const filteredTable = table.data.data.map(employee=> {
-        return employee.hours.tableArr.filter(cell=> {
-            return cell.date;
-        });
-    });
-    const absentTime = filteredTable.map(employee=> {
-        return employee.reduce(function(total, num) {
-            return total + num.absentTime;
-        }, 0)
-    });
-    console.log(filteredTable);
-    console.log('------------------ processing table data: ABSENT TIME -----------------------');
-    console.log(absentTime);
-}
+// function processTable(table) {
+//     console.log('------------------ processing table data -----------------------');
+//     const filteredTable = table.data.data.map(employee=> {
+//         return employee.hours.tableArr.filter(cell=> {
+//             return cell.date;
+//         });
+//     });
+//     const absentTime = filteredTable.map(employee=> {
+//         return employee.reduce(function(total, num) {
+//             return total + num.absentTime;
+//         }, 0)
+//     });
+//     console.log(filteredTable);
+//     console.log('------------------ processing table data: ABSENT TIME -----------------------');
+//     console.log(absentTime);
+// }
 
 
