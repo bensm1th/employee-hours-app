@@ -87,20 +87,45 @@ router.post(`${rootURL}`, requireAuth, function(req, res) {
 
 //SHOW route
 router.get(`${rootURL}:id`, requireAuth, function(req, res) {
-    Table.findById(req.params.id, function(err, table) {
+    Table.findById(req.params.id).populate('approved.manager finalized.manager').exec(function(err, table) {
         res.send(table);
     })
 });
 
 //UPDATE route
 router.put(`${rootURL}:hours_id`, requireAuth, function(req, res) {
-    Table.findByIdAndUpdate(req.params.hours_id, req.body).populate('approved.manager').exec(function(err, table) {
-        if (err) {
-            console.log(err) 
-        } else {
-            res.send('Table successfully updated!');
+    //separate the 'find' and 'update' operations
+    let responseText = 'Table successfully updated';
+    console.log(req.body);
+    Table.findById(req.params.hours_id, function(err, table) {
+        if (err) console.log(err);
+        if (req.body.finalized.status && !table.finalized.status) {
+            responseText = 'Table has been finalized';
         }
+        if (req.body.approved.status && !table.approved.status) {
+            responseText = 'Table has been approved';
+        }
+        if (req.body.approved.status && table.approved.status && !req.body.finalized.status && req.body.type !== 'update') {
+            console.log('already approved');
+            return res.status(422).send('Current operation failed. Table was already approved');
+        }
+        // if (!req.body.finalized.status && table.finalized.status) {
+        //     return res.status(422).send('Table cannot be updated because it has already been finalized elsewhere');
+        // }
+        if (table.finalized.status) {
+            console.log('already finalized')
+            return res.status(422).send('Current operation failed. Table was already finalized.');
+        } //else {
+            Table.findByIdAndUpdate(req.params.hours_id, req.body).populate('approved.manager').exec(function(err, updateTable) {
+                if (err) {
+                    console.log(err) 
+                } else {
+                    res.send(responseText);
+                }
+            });
+        //}
     });
+    
 });
 
 //DELETE route

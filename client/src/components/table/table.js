@@ -15,7 +15,9 @@ import {
     addCommentEmployee, 
     commentClear,
     approvePayroll,
-    clearPayrollMessage
+    clearPayrollMessage,
+    finalizePayroll,
+    autoSaveTable
     } from '../../actions/index';
 import { v4 } from 'node-uuid';
 import { Link } from 'react-router';
@@ -47,8 +49,12 @@ class HoursTable extends Component {
     componentWillMount() {
         this.props.fetchTableData(this.props.params.id);
         this.props.fetchEmployees();
+        this.props.clearPayrollMessage();
     }
 
+    componentWillUnmount() {
+        this.props.saveTable(this.props.hours);
+    }
 
     renderEmployees(data) {
         return data.map(employee=> {
@@ -61,11 +67,14 @@ class HoursTable extends Component {
                 if (index === 0) {
                     display = cell.name;
                 }
-                if (index !== 0 && index !== employee.hours.tableArr.length -1) {
+                if (index !== 0 && index !== employee.hours.tableArr.length -1 && !this.props.finalized) {
                     handleCellClick = ()=> this.props.cellClick(cell.employeeId, cell.date, cell.id);
                     handleCellBlur = ()=> this.props.cellBlur(cell.employeeId, cell.date, cell.id);
                     display = cell.workedTime;
-                }         
+                }   
+                if (this.props.finalized && index !== 0) {
+                    display = cell.workedTime;
+                }      
                 if (index === employee.hours.tableArr.length -1) {
                     display = cell.totalHours;
                 } 
@@ -82,7 +91,6 @@ class HoursTable extends Component {
                             sick={cell.sickTime}
                             vacation={cell.vacationTime}
                             absent={cell.absentTime}
-                            holiday={cell.holiday}
                         />
             });
             return (<TableRow key={v4()}>{cells}</TableRow>);
@@ -97,23 +105,33 @@ class HoursTable extends Component {
     renderComments() {
         //this will probably need to loop over an array, and create one set of key/value pairs for each object in the array
         // AND, it will need to have a form with that select things an input
-        const employees = this.props.employees.map(employee=> {
-            return `${employee.lastName}, ${employee.firstName}`;
-        });
+        let employees, category, toggleInput;
+        if (!this.props.finalized) {
+            employees = this.props.employees.map(employee=> {
+                return `${employee.lastName}, ${employee.firstName}`;
+            }); 
+            category = 'Employee'
+            toggleInput = 'ui right labeled fluid input';
+        }
+        else {
+            employees = '';
+            category = 'Not Available';
+            toggleInput = 'ui right labeled disabled fluid input';
+        }
         return (
             <div>
-                <form  onSubmit={(e)=> {
+                <form onSubmit={(e)=> {
                     e.preventDefault();
                     this.handleCommentSubmit();
                 }}>
-                    <div className='ui right labeled fluid input'>
+                    <div className={toggleInput}>
                         <InputSelect
                             id='category' 
                             options={employees}
                             logValue={this.setValues}
                             type={'comment'}
                             unit={'employee'}
-                            category={'Employee'}
+                            category={category}
                         />
                         <input
                             type='text'
@@ -142,23 +160,28 @@ class HoursTable extends Component {
             </div>
         );
     }
+
     renderSubmittedComments() {
         let commentArr;
+        const commentClass = !this.props.finalized ? 'misc' : '';
         if (this.props.comments.length) {
-        commentArr = this.props.comments.map(comment=> {
-            if (comment.id){
-            return (
-                <tr id='misc' key={comment.id}>
-                    <td className='collapsing'> {comment.employee}</td>
-                    <td> {comment.comment} 
-                        <i 
-                            id="commentRemove" 
-                            className="large remove icon"
-                            onClick={()=>this.handleCommentRemove(comment.id)}
-                        ></i>
-                    </td>
-                </tr>
-            )}
+            commentArr = this.props.comments.map(comment=> {
+                if (comment.id){
+                return (
+                    <tr id={commentClass} key={comment.id}>
+                        <td className='collapsing'> {comment.employee}</td>
+                        <td> {comment.comment} 
+                        {!this.props.finalized ? 
+                            (<i 
+                                id="commentRemove" 
+                                className="large remove icon"
+                                onClick={()=>this.handleCommentRemove(comment.id)}
+                            ></i>) : 
+                            ('')
+                        }
+                        </td>
+                    </tr>
+                )}
         })}
         return commentArr;
     }
@@ -194,7 +217,7 @@ class HoursTable extends Component {
             return (
                 <AlertMessage
                     success={success}
-                    errorMessage={''}
+                    errorMessage={this.props.payrollMessage.message}
                     handleMessageClose={this.handleMessageClose}
                     successMessage={this.props.payrollMessage.message}
                 />
@@ -231,7 +254,7 @@ class HoursTable extends Component {
                     >Delete</button>
                     <button 
                         className="ui right labeled icon button"
-                        onClick={()=>this.props.approvePayroll(hours, managerId)}
+                        onClick={()=>this.props.finalizePayroll(hours, managerId)}
                     >
                         <i className="check circle outline large icon"></i>
                         Finalize Payroll
@@ -265,7 +288,12 @@ class HoursTable extends Component {
         }
     }
 
+    handleFinalizedTable(reducedTable) {
+        console.log(reducedTable);
+    }
+
     render() {
+        if (this.props.finalized) this.handleFinalizedTable(processTable(this.props.hours.data.data));
         const { managerId, hours, hours: { status } } = this.props;
         const employeeData = status === 200 ? this.renderEmployees(hours.data.data) : <tr><td><div> employee name! </div></td></tr>;
         const headers = status === 200 ? renderHeaders(hours.data.dates): <th>Date</th>;
@@ -273,13 +301,19 @@ class HoursTable extends Component {
         const start = status === 200 ? dates[0]: '';
         const end = status === 200 ? dates[dates.length - 1]: '';
         return (
-            <div className="ui container">
+            <div 
+                className="ui container"
+            >
                 <div className='ui segments'>
                     <div className='ui center aligned green inverted segment'>
                         <h1>
                         HOURLY TIMES FOR : {start}-{end} 
                         </h1>
                         -- created by : {`${this.props.createdBy.firstName} ${this.props.createdBy.lastName}`}
+                        <br />
+                        {this.props.approved ? `--approved by ${this.props.approvedBy.firstName} ${this.props.approvedBy.lastName}`: ''}
+                        <br />
+                        {this.props.finalized ? `--finalzed by ${this.props.finalizedBy.firstName} ${this.props.finalizedBy.lastName}`: ''}
                     </div>
                     <div className='ui segment'>
                         <table className="ui celled table">
@@ -296,7 +330,7 @@ class HoursTable extends Component {
                         </table>
                     </div>
                     <div className='ui center aligned secondary segment'>
-                        <p> Double-click on any cell to add vacation, sick, absent, or holiday time </p>
+                        <p> Double-click on any cell to add vacation, sick, or absent time </p>
                     </div>
                 </div>
                 <div className='ui two column grid'>
@@ -352,7 +386,9 @@ const mapStateToProps = (state) => {
         managerId: state.auth.id,
         payrollMessage: state.hours.payrollMessage,
         approved: state.hours.data.approved.status,
-        finalized: state.hours.data.finalized.status
+        finalized: state.hours.data.finalized.status,
+        approvedBy: state.hours.data.approved.manager,
+        finalizedBy: state.hours.data.finalized.manager
     }
 }
 
@@ -368,24 +404,46 @@ export default connect(mapStateToProps, {
     addCommentEmployee,
     commentClear,
     approvePayroll,
-    clearPayrollMessage
+    clearPayrollMessage,
+    finalizePayroll,
+    autoSaveTable
 })(HoursTable);
+//processTable takes the table data and reduces it to objects containing an employee number, and the total amounts of time for each category;
+function processTable(table) {
+    return table
+        .map(employee=> {
+            return employee.hours.tableArr
+        .filter(cell=> {
+            return cell.date;
+        })
+    }).map(employee=> {
+        return employee.map(cell=> {
+            const props = filterTimeTypes(cell);
+            return {...cell, absentTime: props.absentTime, sickTime: props.sickTime, vacationTime: props.vacationTime, workedTime: props.workedTime };
+        })
+        .reduce((redx, curr)=> {
+            redx.absentTime += curr.absentTime;
+            redx.sickTime += curr.sickTime;
+            redx.vacationTime += curr.vacationTime;
+            redx.workedTime += curr.workedTime;
+            redx.employeeId = curr.employeeId;
+            return redx;
+        }, { absentTime: 0, sickTime: 0, vacationTime: 0, workedTime: 0 })
+    })
 
-// function processTable(table) {
-//     console.log('------------------ processing table data -----------------------');
-//     const filteredTable = table.data.data.map(employee=> {
-//         return employee.hours.tableArr.filter(cell=> {
-//             return cell.date;
-//         });
-//     });
-//     const absentTime = filteredTable.map(employee=> {
-//         return employee.reduce(function(total, num) {
-//             return total + num.absentTime;
-//         }, 0)
-//     });
-//     console.log(filteredTable);
-//     console.log('------------------ processing table data: ABSENT TIME -----------------------');
-//     console.log(absentTime);
-// }
+    function convertTime(tableCell, type) {
+        const hours = (tableCell[type]).match(/^\d+/g);
+        const minutes = (tableCell[type]).match(/\d+$/g)/60;
+        const totalTime = +hours + +minutes;
+        return totalTime;
+    }
+    function filterTimeTypes(cell) {
+        const absentTime = typeof cell.absentTime === 'string' ? convertTime(cell, 'absentTime') : 0;
+        const sickTime = typeof cell.sickTime === 'string' ? convertTime(cell, 'sickTime') : 0;
+        const vacationTime = typeof cell.vacationTime === 'string' ? convertTime(cell, 'vacationTime') : 0;
+        const workedTime = typeof cell.workedTime === 'string' ? convertTime(cell, 'workedTime') : 0;
+        return { absentTime, sickTime, vacationTime, workedTime }
+    }
+}
 
 

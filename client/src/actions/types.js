@@ -37,3 +37,4 @@ export const MANAGER_UPDATE = 'MANAGER_UPDATE';
 export const ID_USER = 'ID_USER';
 export const PAYROLL_MESSAGE = 'PAYROLL_MESSAGE';
 export const UN_ID_USER = 'UN_ID_USER';
+export const HOURS_DELETE = 'HOURS_DELETE';

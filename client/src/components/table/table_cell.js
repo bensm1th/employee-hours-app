@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InputSelect from './table_input_select';
-import { updateHours } from '../../actions/index.js'
+import CellUpdate from './table_cell_update';
+import { updateHours, deleteHours } from '../../actions/index.js'
 
 class TableCell extends Component {
 
@@ -29,6 +30,8 @@ class TableCell extends Component {
     }
     
     render() {
+        console.log('=============== this.props.cell ===================')
+        console.log(this.props.cell);
         if (!this.props.editable) {
             return (
                 <td 
@@ -36,31 +39,15 @@ class TableCell extends Component {
                 >
                     {this.props.cell}
                     {this.props.vacation ? (
-                        <div>
-                            <br />
-                            {this.props.vacation} vacation
-                        </div>
+                        <CellUpdate {...this.props} {...this.state} type='vacation' />
                         ) : ''}
 
                     {this.props.sick ? (
-                        <div>
-                            <br />
-                            {this.props.sick} sick
-                        </div>
+                        <CellUpdate {...this.props} {...this.state}  type='sick' />
                         ) : ''}
 
                     {this.props.absent ? (
-                        <div>
-                            <br />
-                            {this.props.absent} absent
-                        </div>
-                        ) : ''}
-
-                    {this.props.holiday ? (
-                        <div>
-                            <br />
-                            {this.props.holiday} holiday
-                        </div>
+                        <CellUpdate {...this.props} {...this.state}  type='absent' />
                         ) : ''}
                 </td>
             )
@@ -88,7 +75,7 @@ class TableCell extends Component {
                         id='type' 
                         choices={4} 
                         category='type' 
-                        options={['Vacation', 'Sick', 'Absent', 'Holiday']} 
+                        options={['Vacation', 'Sick', 'Absent']} 
                         logValue={this.logValue}
                     />
                     <button 
@@ -111,5 +98,4 @@ const mapStateToProps = (state) => {
         state: state
     }
 }
-export default connect(mapStateToProps, { updateHours })(TableCell);
-//                        onClick={()=>cellClick(this.props.employeeId, this.props.date, this.props.id)}
+export default connect(mapStateToProps, { updateHours, deleteHours })(TableCell);

@@ -1,5 +1,5 @@
 import { UPDATE_HOURS, CELL_BLUR, 
-    CELL_CLICKED, SAVE_TABLE, 
+    CELL_CLICKED, SAVE_TABLE, HOURS_DELETE,
     POST_HOURS, GET_TABLE, PAYROLL_MESSAGE,
     COMMENT_ADD, COMMENT_CLEAR } from '../actions/types';
 
@@ -25,6 +25,13 @@ const changeTable = (state={}, action) => {
             if (state.id === action.payload.id) {
                 const typeObj = timeType(action.payload);
                 return Object.assign({}, state, {editable: false}, typeObj)
+            }
+            return state;
+        case HOURS_DELETE:
+            if (state.id === action.payload.id) {
+                // console.log('===========================================replace obj=======================================================')
+                // console.log( {[action.payload.update.type]: 0} );
+                return {...state, [action.payload.update.type]: 0}
             }
             return state;
         case CELL_BLUR:
@@ -75,6 +82,7 @@ export default function(state=initialState, action) {
         case COMMENT_ADD:       
             return {...state, data: {...state.data, comments: [...state.data.comments, action.payload]}};
         case UPDATE_HOURS:
+        case HOURS_DELETE:
         case CELL_BLUR:
         case CELL_CLICKED:
             return {...state, data: {...state.data, data: [...state.data.data.map(e=>change(e, action)) ]}};

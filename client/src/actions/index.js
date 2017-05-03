@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { 
-    AUTH_USER, UNAUTH_USER, DATE_CLEAR, 
+    AUTH_USER, UNAUTH_USER, DATE_CLEAR, HOURS_DELETE,
     DATE_SET, TABLE_DELETE, EMPLOYEE_DELETE, TABLE_FETCH, 
     EMPLOYEE_POST, LOGSTATE_CLEAR, ID_CHANGE, TIMESTAMP_POST, 
     EMPLOYEE_UPDATE, EMPLOYEES_POST, EMPLOYEE_FETCH, PAYROLL_MESSAGE,
@@ -26,18 +26,44 @@ export function clearEmployeeErrorMessage() {
     }
 }
 
-
 export function approvePayroll(hours, managerId) {
     return function(dispatch) {
         hours.data.approved = {manager: managerId, status: true};
         const options = { headers: { authorization: localStorage.getItem('token') } };
         axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options ) 
             .then(response => {
+                if (response.status === 200) {
+                    dispatch({type: PAYROLL_MESSAGE, payload: {message: response.data, show: true, success: true}})
+                }
                 dispatch({ type: SAVE_TABLE, payload: {hours} });
-                browserHistory.push('/hours/index');
+                browserHistory.push('/');
             }) 
-            .catch(response=> {
-                console.log(response);
+            .catch(error=> {
+                const errorObj = Object.assign({}, error);
+                if (errorObj.response.status === 422 ) {
+                    dispatch({type: PAYROLL_MESSAGE, payload: {message: errorObj.response.data, show: true, success: false}})
+                }
+            });
+    }
+}
+
+
+export function finalizePayroll(hours, managerId) {
+    return function(dispatch) {
+        hours.data.finalized = {manager: managerId, status: true};
+        const options = { headers: { authorization: localStorage.getItem('token') } };
+        axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options ) 
+            .then(response => {
+                if (response.status === 200) {
+                    dispatch({type: PAYROLL_MESSAGE, payload: {message: response.data, show: true, success: true}})
+                }
+                browserHistory.push('/owner');
+            }) 
+            .catch(error=> {
+                const errorObj = Object.assign({}, error);
+                if (errorObj.response.status === 422 ) {
+                    dispatch({type: PAYROLL_MESSAGE, payload: {message: errorObj.response.data, show: true, success: false}})
+                }
             });
     }
 }
@@ -68,7 +94,7 @@ export function clearAuthErrorMessage() {
         type: CLEAR_ERROR
     }
 }
-UN_ID_USER
+
 export function signoutOwner() {
     return function(dispatch){
         localStorage.removeItem('ownerToken');
@@ -381,6 +407,7 @@ export function postHours(beginning, end, id) {
 
 export function saveTable(hours) {
     return function(dispatch) {
+        hours.data.type = 'update';
         const options = { headers: { authorization: localStorage.getItem('token') } };
         axios.put(`${ROOT_URL}/${hours.data._id}`, hours.data, options)
             .then(result=> {
@@ -394,11 +421,46 @@ export function saveTable(hours) {
                     payload: {message: result.data, show: true, success: true}
                 });
             })
-            .catch(response=> {
-                console.log(response);
+            .catch(error=> {
+                const errorObj = Object.assign({}, error);
+                if (errorObj.response.status === 422 ) {
+                    dispatch({type: PAYROLL_MESSAGE, payload: {message: errorObj.response.data, show: true, success: false}})
+                }
             });
     }
 }
+
+export function fetchTableData(id) {
+    const options = { headers: { authorization: localStorage.getItem('token') } };
+    const request = axios.get(`${ROOT_URL}/${id}`, options);
+    return {
+        type: GET_TABLE,
+        payload: request
+    }
+}
+
+export function autoSaveTable(id, table) {
+    console.log('--------------result in autoSaveTable=========================')
+    console.log(table);
+    return function(dispatch) {
+        const options = { headers: { authorization: localStorage.getItem('token') } };
+                axios.put(`${ROOT_URL}/${table.data._id}`, table.data, options)
+                    .then(result=> {
+                        dispatch({
+                            type: SAVE_TABLE,
+                            payload: {table}
+                        });
+                    })
+                    .then(result => {
+                        console.log('--------------result in fetchTableData in autosave =========================')
+                        console.log(result);
+                        dispatch(fetchTableData(id))
+                    })
+                    .catch(response=> {
+                        console.log(response);
+                    });
+            }     
+    }
 
 export function addComment(comment, employee) {
     return function(dispatch) {
@@ -434,15 +496,6 @@ export function onTextInput(text) {
     }
 }
 
-export function fetchTableData(id) {
-    const options = { headers: { authorization: localStorage.getItem('token') } };
-    const request = axios.get(`${ROOT_URL}/${id}`, options);
-    return {
-        type: GET_TABLE,
-        payload: request
-    }
-}
-
 export function cellClick(employeeId, date, id) {
     return {
         type: CELL_CLICKED,
@@ -464,6 +517,12 @@ export function updateHours(employeeId, date, id, update) {
     }
 }
 
+export function deleteHours(employeeId, date, id, update) {
+    return {
+        type: HOURS_DELETE,
+        payload: {employeeId, date, id, update}
+    }
+}
 
 
 
